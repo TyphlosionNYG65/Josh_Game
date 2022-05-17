@@ -57,7 +57,7 @@ class Player:
 
     def contact(self,other):
         x_range = [self.x-(self.x_dim/2),self.x+(self.x_dim/2)]
-        y_range = [self.y-(self.y_dim/2),self.y+(self.ya_dim/2)]
+        y_range = [self.y-(self.y_dim/2),self.y+(self.y_dim/2)]
         if x_range[0] <= other.x <= x_range[1] and y_range[0] <= other.y <= y_range[1]:
             return True
 
