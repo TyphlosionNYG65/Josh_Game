@@ -1,11 +1,12 @@
 import pygame,math,random, Textures
 from screen_parameters import screen_vals
+from game_clock import clock
 import Textures
 
-
+grav = 50000
 width = screen_vals.width
 height = screen_vals.height
-speed = 1
+speed = 1000
 class Player:
     def __init__(self,x,y,pic,x_dim,y_dim):
         self.x = x
@@ -19,8 +20,9 @@ class Player:
         self.pic = pygame.transform.scale(self.pic,(self.x_dim,self.y_dim))
 
     def update_position(self):
-        self.x += self.x_velocity
-        self.y += self.y_velocity
+        delta = clock.get_time()
+        self.x += (delta/1000) * self.x_velocity
+        self.y += (delta/1000) * self.y_velocity
 
         if 0 > self.x :
             self.x = 0
@@ -36,9 +38,12 @@ class Player:
             self.y_velocity = 0
 
     def update_velocity(self,movement):
+        delta = clock.get_time()
         velocity = self.add(movement)
         self.x_velocity = velocity[0]
         self.y_velocity = velocity[1]
+        if self.y <  height -60:
+            self.y_velocity += (delta/1000 * grav)
 
     def magnitude(self,v):
         return math.sqrt(sum(v[i] * v[i] for i in range(len(v))))
@@ -64,7 +69,7 @@ class Player:
 
 class Enemy(Player):
     def __init__(self,x,y,pic,x_dim,y_dim,target,targeting):
-        super().__init__(x,y,pic,x_dim,y_dim)
+        super().__init__(x, y, pic, x_dim, y_dim)
         self.target = target
         self.targeting = targeting
 
