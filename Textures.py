@@ -1,5 +1,12 @@
-import os
-Josh_Texture = os.path.join(os.getcwd(),'Images',"Josh.png")
-sus_Texture = os.path.join(os.getcwd(),'Images','wonder-day-among-us-21-3447033139.png')
-Start_screen = os.path.join(os.getcwd(),"images",'Start screen.jpg')
+import os,pygame
+def load(Image):
+    path = os.path.join(os.getcwd(),'Images',Image)
+    return pygame.image.load(path)
+Josh_Texture = load('Josh.png')
+Start_screen = load('Start screen.jpg')
+start_title = load('inkpx-word-art.png')
+Durple_Front = load('Durple_Front.png')
+Durple_Back = load('Durple_Back.png')
+Coon_Front = load('The Coon Front.png')
+Coon_Back = load('The Coon Back.png')
 

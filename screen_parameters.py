@@ -10,3 +10,4 @@ class screen_size:
 screen_vals = screen_size()
 screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 screen_vals.width, screen_vals.height = screen.get_size()
+FPS = 120
