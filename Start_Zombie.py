@@ -1,5 +1,5 @@
-import pygame
-from screen_parameters import screen_vals
+import pygame,random,Textures
+from screen_parameters import screen_vals,screen
 from game_clock import clock
 class Start_Zombie:
     def __init__(self, x, y, pic, x_dim, y_dim, velocity, side):
@@ -27,3 +27,40 @@ class Start_Zombie:
             del self
             return True
         return False
+
+def update_velocities(Entities):
+    for i in Entities:
+        if type(i) == list:
+            update_velocities(i)
+        else:
+            i.update_velocity()
+
+def paste_entities(Entities):
+    for i in Entities:
+        if type(i) == list:
+            paste_entities(i)
+        else:
+            screen.blit(i.pic, (i.x, i.y))
+
+def spawner(Zombies):
+    spawn = random.choices([True,False], weights = (.005,.99))
+    if spawn[0] == True:
+        side = random.randrange(0,2)
+        speed = random.randrange(100,300)
+        height = random.randrange(50,screen_vals.height-50)
+        image= random.choices([Textures.Josh_Texture])[0]
+        if side == 0:
+            return Start_Zombie(-30,height,image,43,64,(speed,0),'left')
+        elif side == 1:
+            return Start_Zombie(screen_vals.width+30,height,image,43,64,(-1*speed,0),'right')
+
+def update(zombies):
+    if zombies == []:
+        return
+    for i in zombies:
+        if i == None:
+            return
+        i.update_position()
+        if i.out_of_screen():
+            zombies.remove(i)
+        screen.blit(i.pic,(i.x,i.y))

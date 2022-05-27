@@ -1,126 +1,189 @@
 class Gay:
-    resist = []
-    weak = []
-    immune = []
+    name = 'Gay'
+    multipliers = {'Racism':2,
+                  'Lean':1,
+                'Gay':1,
+                'Weeb':1,
+                'Gainz':1,
+                'Sex':.5,
+                'Gamer':2,
+                'Furry':2,
+                'Virgin':1,
+                'Retard':2,
+                'Nerd':1}
+    color = (255,192,203)
+    alt_color = (255, 255, 255)
 
 
 class Lean:
-    resist = []
-    weak = []
-    immune = []
+    name = 'Lean'
+    multipliers = {'Racism':1,
+                  'Lean':.5,
+                  'Gay':1,
+                  'Weeb':.5,
+                  'Gainz':2,
+                  'Sex':2,
+                  'Gamer':.5,
+                  'Furry':2,
+                  'Virgin':.5,
+                  'Retard':.5,
+                  'Nerd':2}
+    color = (138,43,226)
+    alt_color = (255,255,255)
 
 
 class Racism:
-    resist = []
-    weak = []
-    immune = []
+    name = 'Racism'
+    multipliers = {'Racism':.5,
+                  'Lean':1,
+                  'Gay':.5,
+                  'Weeb':2,
+                  'Gainz':.5,
+                  'Sex':.5,
+                  'Gamer':2,
+                  'Furry':.5,
+                  'Virgin':1,
+                  'Retard':.5,
+                  'Nerd':.5}
+    color = (255,255,0)
+    alt_color = (255, 255, 255)
 
 
 class Weeb:
-    resist = []
-    weak = []
-    immune = []
+    name = 'Weeb'
+    multipliers = {'Racism':.5,
+                  'Lean':1,
+                  'Gay':.5,
+                  'Weeb':1,
+                  'Gainz':2,
+                  'Sex':0,
+                  'Gamer':1,
+                  'Furry':1,
+                  'Virgin':2,
+                  'Retard':1,
+                  'Nerd':.5}
+    color = (0, 0, 0)
+    alt_color = (255, 255, 255)
 
 
 class Gainz:
-    resist = []
-    weak = []
-    immune = []
+    name = 'Gainz'
+    multipliers = {'Racism':2,
+                  'Lean':2,
+                  'Gay':1,
+                  'Weeb':.5,
+                  'Gainz':.5,
+                  'Sex':1,
+                  'Gamer':.5,
+                  'Furry':.5,
+                  'Virgin':0,
+                  'Retard':1,
+                  'Nerd':2}
+    color = (210,105,30)
+    alt_color = (255, 255, 255)
 
 
 class Sex:
-    resist = []
-    weak = []
-    immune = []
+    name = 'Sex'
+    multipliers = {'Racism':.5,
+                  'Lean':.5,
+                  'Gay':1,
+                  'Weeb':2,
+                  'Gainz':2,
+                  'Sex':1,
+                  'Gamer':.5,
+                  'Furry':2,
+                  'Virgin':0,
+                  'Retard':.5,
+                  'Nerd':.5}
+    color = (0, 0, 0)
+    alt_color = (255, 255, 255)
 
 
 class Gamer:
-    resist = []
-    weak = []
-    immune = []
+    name = 'Gamer'
+    multipliers = {'Racism':1,
+                  'Lean':2,
+                  'Gay':.5,
+                  'Weeb':.5,
+                  'Gainz':2,
+                  'Sex':0,
+                  'Gamer':1,
+                  'Furry':1,
+                  'Virgin':2,
+                  'Retard':1,
+                  'Nerd':2}
+    color = (30,144,255)
+    alt_color = (255, 255, 255)
 
 
 class Furry:
-    resist = []
-    weak = []
-    immune = []
+    name = 'Furry'
+    multipliers = {'Racism':2,
+                  'Lean':1,
+                  'Gay':1,
+                  'Weeb':2,
+                  'Gainz':1,
+                  'Sex':.5,
+                  'Gamer':2,
+                  'Furry':1,
+                  'Virgin':1,
+                  'Retard':2,
+                  'Nerd':1}
+    color = (138,43,226)
+    alt_color = (255, 255, 255)
 
 
 class Virgin:
-    resist = []
-    weak = []
-    immune = []
+    name = 'Virgin'
+    multipliers = {'Racism':1,
+                  'Lean':2,
+                  'Gay':2,
+                  'Weeb':.5,
+                  'Gainz':.5,
+                  'Sex':2,
+                  'Gamer':.5,
+                  'Furry':1,
+                  'Virgin':1,
+                  'Retard':2,
+                  'Nerd':1}
+    color = (0, 0, 0)
+    alt_color = (255, 255, 255)
 
 
 class Retard:
-    resist = []
-    weak = []
-    immune = []
+    name = 'Retard'
+    multipliers = {'Racism':1,
+                  'Lean':.5,
+                  'Gay':1,
+                  'Weeb':1,
+                  'Gainz':.5,
+                  'Sex':2,
+                  'Gamer':1,
+                  'Furry':.5,
+                  'Virgin':.5,
+                  'Retard':1,
+                  'Nerd':2}
+    color = (0, 0, 0)
+    alt_color = (255, 255, 255)
 
 
 class Nerd:
-    resist = []
-    weak = []
-    immune = []
+    name = 'Nerd'
+    multipliers = {'Racism':1,
+                  'Lean':.5,
+                  'Gay':1,
+                  'Weeb':1,
+                  'Gainz':2,
+                  'Sex':2,
+                  'Gamer':.5,
+                  'Furry':1,
+                  'Virgin':.5,
+                  'Retard':2,
+                  'Nerd':1}
+    color = (0, 0, 0)
+    alt_color = (255, 255, 255)
 
-def resist(type,list):
-    for i in list:
-        type.resist.append(i)
 
-def weak(type,list):
-    for i in list:
-        type.weak.append(i)
-
-def immune(type,list):
-    for i in list:
-        type.immune.append(i)
-
-#Racism
-resist(Racism,[Racism,Gay,Gainz,Sex,Furry,Retard,Nerd])
-weak(Racism,[Weeb,Gamer])
-
-#Lean
-resist(Lean,[Lean,Weeb,Gamer,Virgin,Retard])
-weak(Lean,[Gainz,Sex,Nerd])
-
-#Gay
-resist(Gay,[Sex])
-weak(Gay,[Racism,Gay,Gamer,Furry, Retard])
-
-#Weeb
-resist(Weeb,[Racism,Gay,Nerd])
-weak(Weeb,[Gainz,Virgin])
-immune(Weeb,[Sex])
-
-#Gainz
-resist(Gainz,[Weeb, Gainz, Gamer, Furry])
-weak(Gainz,[Racism, Lean,Nerd])
-immune(Gainz,[Virgin])
-
-#Sex
-resist(Sex,[Racism,Lean,Gamer,Retard,Nerd])
-weak(Sex,[Weeb,Gainz,Furry])
-immune(Sex,[Virgin])
-
-#Gamer
-resist(Gamer,[Gay,Weeb])
-weak(Gamer,[Lean,Gainz,Virgin,Nerd])
-immune(Gamer,[Sex])
-
-#Furry
-resist(Furry,[Sex])
-weak(Furry,[Racism,Lean,Weeb,Gainz,Gamer,Furry,Retard])
-
-#Virgin
-resist(Virgin,[Weeb,Gainz,Gamer])
-weak(Virgin,[Lean,Gay,Sex,Retard])
-
-#Retard
-resist(Retard,[Lean,Gainz,Furry,Virgin,Nerd])
-weak(Retard,[Sex])
-
-#Nerd
-resist(Nerd,[Lean,Gamer,Virgin])
-weak(Nerd,[Gainz,Sex,Retard])
 
 
