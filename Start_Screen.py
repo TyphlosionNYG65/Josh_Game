@@ -1,4 +1,4 @@
-import pygame,Text,Button,Textures,sys,game_clock
+import pygame,Text,Button,Textures,sys,game_clock,Joshumon,random
 from screen_parameters import *
 from Start_Zombie import update,spawner
 def Start():
@@ -15,19 +15,18 @@ def Start():
     zombies = []
     # Create Buttons
     buttons = []
-    exit_text = Text.Text(minor_font, 'Exit', (screen_w(.5),  screen_h(.75)), (50, 50, 50), 'center')
-    exit_button = Button.textButton(exit_text)
+    exit_text = Text.Text(minor_font, 'Exit',  (50, 50, 50))
+    exit_button = Button.textButton(exit_text,(screen_w(.5),  screen_h(.75)))
     buttons.append(exit_button)
 
-    start_text = Text.Text(minor_font, 'Start', (screen_w(.5), screen_h(.69420)), (50, 50, 50), 'center')
-    start_button = Button.textButton(start_text)
+    start_text = Text.Text(minor_font, 'Start', (50, 50, 50))
+    start_button = Button.textButton(start_text,(screen_w(.5), screen_h(.69420)))
     buttons.append(start_button)
     start_screen = pygame.transform.smoothscale(Textures.Start_screen, (screen_w(1), screen_h(1)))
     while running:
         screen.fill((0, 240, 240))
         screen.blit(start_screen, (0, 0))
-        screen.blit(pygame.transform.smoothscale(Textures.Durple_Front,(58,85)),(screen_w(.61),screen_h(.74)))
-        screen.blit(pygame.transform.smoothscale(Textures.Coon_Front, (65, 50)), (screen_w(.677), screen_h(.74)))
+
         zombies.append(spawner(zombies))
         if zombies[-1] == None:
             zombies = zombies[:-1]

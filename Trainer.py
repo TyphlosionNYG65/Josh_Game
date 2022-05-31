@@ -1,4 +1,4 @@
-import pygame,random
+import pygame,random,Textures
 
 class Player:
     def __init__(self,name,Joshumons):
@@ -20,16 +20,17 @@ class Player:
                 return True
         return False
 
-
-
-
-
 class AI_Trainer(Player):
     def __init__(self,name,Joshumons):
         super().__init__(name,Joshumons)
 
     def AI_Move(self):
-        return random.choices(self.current_mon.moveset)[0]
+        return ['attack',random.choices(self.current_mon.moveset)[0]]
+
+class Josh(Player):
+    def __init__(self,name,Joshumons):
+        super().__init__(name,Joshumons)
+
 
 
 

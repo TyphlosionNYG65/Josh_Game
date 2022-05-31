@@ -1,7 +1,7 @@
 import Type
 class Punch:
     name = 'Punch'
-    power = 1
+    power = 30
     type = Type.Gainz
     text = 'Punched'
 
@@ -31,6 +31,6 @@ class Coon_Pounce:
 
 class Coon_Claws:
     name = 'Coon Claws'
-    power = 50
+    power = 15
     type = Type.Furry
     text = 'slashed'

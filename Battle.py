@@ -1,15 +1,11 @@
+import pygame
+
 import Button
-import Interactives
 import Text
 import Textures
 import Trainer
-import pygame
 import game_clock
 from screen_parameters import screen, screen_vals, screen_w, screen_h
-
-attack_font = pygame.font.SysFont('Bahnschrift', 30)
-attack = Button.rectangleButton(screen_w(.8), screen_h(.8), (200, 100), (255, 0, 0), 'Attack', attack_font,
-                                ((0, 0, 0), 2))
 
 def Battle(User, Opponent):
     """
@@ -19,6 +15,43 @@ def Battle(User, Opponent):
     """
     global running
     assert type(User) == Trainer.Player
+
+    # Initialize Trainers
+    User.start_battle()  # Initializes Player
+    Opponent.start_battle()  # Initializes AI
+
+    # Initialize textures
+    fight_background = pygame.transform.scale(Textures.Fight_Background2, (screen_vals.width, screen_vals.height))
+
+    # Initial variables
+    mouse_state = False  # Controller for whether mouse as been clicked
+    running = True  # While True battle is running
+    buttons = []
+    current_user_mon = User.current_mon
+
+    # Create Fonts
+    attack_font = pygame.font.SysFont('Bahnschrift', 18)
+    swap_font = pygame.font.SysFont('Bahnschrift', 15)
+    text_font = pygame.font.SysFont('arial', 15)
+    win_font = pygame.font.SysFont('Bahnschrift', 30)
+
+    # Create text boxes
+    somethin = Text.textBox((screen_w(850 / 1920), screen_h(1000 / 1080)), screen_w(200/1920), 2, text_font, 1000)
+
+    # Create buttons
+    attack = Button.rectangleButton(screen_w(.8), screen_h(.8), (screen_w(100 / 1920), screen_h(50 / 1080)),
+                                    (255, 0, 0), 'Attack', attack_font,
+                                    ((0, 0, 0), 2))
+    swap = Button.rectangleButton(screen_w(.86), screen_h(.8), (screen_w(150 / 1920), screen_h(50 / 1080)), (0, 255, 0),
+                                  'Swap Joshumon', attack_font,
+                                  ((0, 0, 0), 2))
+    moves = Button.create_move_buttons(User.current_mon.moveset, attack_font)
+    monButtons = Button.create_mon_buttons(
+        [Joshumon for Joshumon in User.Joshumons if Joshumon != User.current_mon and Joshumon.fainted == False],
+        attack_font)
+    back = Button.rectangleButton(screen_w(.8), screen_h(.8), (screen_w(100 / 1920), screen_h(50 / 1080)),
+                                    (255, 0, 0), 'Back', attack_font,
+                                    ((0, 0, 0), 2))
 
     class turn:
         def __init__(self, User, Opponent, textbox):
@@ -36,19 +69,21 @@ def Battle(User, Opponent):
             self.Opponent = Opponent
             self.textbox = textbox
             self.fainted = []
+            self.mon_select = False
 
         def activePhase(self, buttons, turn_list, attack):
-            print(self.phase)
             move_responses = {
                 'Supereffective': 'Nice move, king',
                 'Noteffective': 'Kinda lame move bro',
                 'None': 'That move was shit and you should feel bad'
             }
-            if self.phase == 'preTurn':
-                buttons.append(attack)
-                self.phase = 'None'
+            if self.mon_select:
                 return
 
+            if self.phase == 'preTurn':
+                buttons += [attack, swap]
+                self.phase = 'None'
+                return
 
             elif self.phase == 'turnStart':
                 if self.User.current_mon.SD >= self.Opponent.current_mon.SD:
@@ -63,61 +98,87 @@ def Battle(User, Opponent):
                 return
 
             elif self.phase == 'firstMoveStart':
-                self.textbox.text.append(
-                    self.first.current_mon.name + ' ' + self.first.action.text + ' ' + self.last.current_mon.name)
-                damage, variant = self.first.current_mon.attack(self.last.current_mon, self.first.action)
-                if variant != None:
-                    self.textbox.text.append(move_responses[variant])
-                self.last.current_mon.recalc_HP(damage)
-                self.last.current_mon.HP_Bar.calc_Bar()
-                self.phase = 'firstMove'
-                self.fainted = self.faintCheck()
-                if self.fainted != []:
-                    for trainer in self.fainted:
-                        self.textbox.text.append(trainer.current_mon.name + ' fainted!')
-                        trainer.current_mon = None
-                self.textbox.render_text()
-                return
+                if self.first.action[0] == 'attack':
+                    self.textbox.text.append(
+                        self.first.current_mon.name + ' ' + self.first.action[
+                            1].text + ' ' + self.last.current_mon.name)
+                    damage, variant = self.first.current_mon.attack(self.last.current_mon, self.first.action[1])
+                    if variant != None:
+                        self.textbox.text.append(move_responses[variant])
+                    self.last.current_mon.recalc_HP(damage)
+                    self.last.current_mon.HP_Bar.change()
+                    self.fainted = self.faintCheck()
+                    if self.fainted != []:
+                        for trainer in self.fainted:
+                            self.textbox.text.append(trainer.current_mon.name + ' fainted!')
+                    self.textbox.render_text()
+                    self.phase = 'firstMove'
+                    return
+                elif self.first.action[0] == 'swap':
+
+                    self.textbox.text.append(self.first.current_mon.name + ', come back you worthless piece of shit!')
+                    self.textbox.render_text()
+                    self.phase = 'firstMove'
+                    return
 
             elif self.phase == 'firstMove':
-                if self.textbox.text_lines == []:
-                    if self.fainted != []:
-                        self.phase = 'turnEnd'
-                        return
+                if self.continueCheck():
+                    if self.first.action[0] == 'attack':
+                        if self.fainted != []:
+                            self.phase = 'turnEnd'
+                            return
+                    elif self.first.action[0] == 'swap':
+                        self.first.current_mon = self.first.action[1]
+                        self.textbox.text.append(self.first.current_mon.name + ', do somnething!')
+                        self.textbox.render_text()
                     self.phase = 'lastMoveStart'
                     return
                 return
 
-
             elif self.phase == 'lastMoveStart':
-                self.textbox.text.append(
-                    self.last.current_mon.name + ' ' + self.last.action.text + ' ' + self.first.current_mon.name)
-                damage, variant = self.last.current_mon.attack(self.first.current_mon, self.last.action)
-                if variant != None:
-                    self.textbox.text.append(move_responses[variant])
-                self.textbox.render_text()
-                self.first.current_mon.recalc_HP(damage)
-                self.first.current_mon.HP_Bar.calc_Bar()
-                self.phase = 'lastMove'
-                self.fainted = self.faintCheck()
-                if self.fainted != []:
-                    for trainer in self.fainted:
-                        self.textbox.text.append(trainer.current_mon.name + ' fainted!')
-                        trainer.current_mon = None
-                self.textbox.render_text()
-                return
+                if self.continueCheck():
+                    if self.last.action[0] == 'attack':
+                        self.textbox.text.append(
+                            self.last.current_mon.name + ' ' + self.last.action[
+                                1].text + ' ' + self.first.current_mon.name)
+                        damage, variant = self.last.current_mon.attack(self.first.current_mon, self.last.action[1])
+                        if variant != None:
+                            self.textbox.text.append(move_responses[variant])
+                        self.textbox.render_text()
+                        self.first.current_mon.recalc_HP(damage)
+                        self.first.current_mon.HP_Bar.change()
+                        self.phase = 'lastMove'
+                        self.fainted = self.faintCheck()
+                        if self.fainted != []:
+                            for trainer in self.fainted:
+                                self.textbox.text.append(trainer.current_mon.name + ' fainted!')
+                        self.textbox.render_text()
+                        return
+                    elif self.last.action[0] == 'swap':
+                        self.textbox.text.append(
+                            self.first.current_mon.name + ', come back you worthless piece of shit!')
+                        self.phase = 'firstMove'
+                        return
 
             elif self.phase == 'lastMove':
-                if self.textbox.text_lines == []:
+                if self.continueCheck():
+                    if self.last.action[0] == 'attack':
+                        if self.fainted != []:
+                            self.phase = 'turnEnd'
+                            return
+                    elif self.last.action[0] == 'swap':
+                        self.last.current_mon = self.last.action[1]
+                        self.textbox.text.append(self.first.current_mon.name + ', do somnething!')
+                        self.textbox.render_text()
+
                     self.phase = 'turnEnd'
-                    return
                 return
 
-
             elif self.phase == 'turnEnd':
-                if self.textbox.text_lines == []:
+                if self.continueCheck():
                     if self.fainted != []:
                         for trainer in self.fainted:
+                            trainer.current_mon = None
                             if not trainer.check_mons():
                                 self.phase = 'battleOver'
                                 return
@@ -125,6 +186,7 @@ def Battle(User, Opponent):
                                 trainer.start_battle()
 
                     turn_list.append(turn(self.User, self.Opponent, self.textbox))
+                    return
 
                 return
 
@@ -137,22 +199,20 @@ def Battle(User, Opponent):
 
         def faintCheck(self):
             fainted = []
-            if self.User.current_mon.fainted :
+            if self.User.current_mon.fainted:
                 fainted += [User]
             if self.Opponent.current_mon.fainted:
                 fainted += [Opponent]
             return fainted
 
-    def showHP(Trainer):
-        Trainer.current_mon.HP_Bar.calc_Bar()
-        if Trainer == User:
-            Trainer.current_mon.HP_Bar.paste(400, 950)
-        elif Trainer == Opponent:
-            Trainer.current_mon.HP_Bar.paste(1100, 700)
+        def continueCheck(self):
+            if self.textbox.text_lines == [] and self.first.current_mon.HP_Bar.motion == False and self.last.current_mon.HP_Bar.motion == False:
+                return True
+            return False
 
     def battleEnd(Winner):
         global running
-        winBox = Text.textBox((500, 500), 600, 1, win_font, 3000)
+        winBox = Text.textBox((screen_w(500 / 1920), screen_h(500 / 1080)), 600, 1, win_font, 3000)
         winBox.text.append(Winner.name + ' Wins!')
         winBox.render_text()
         winBox.paste_textBox()
@@ -160,48 +220,22 @@ def Battle(User, Opponent):
         pygame.time.delay(winBox.delay)
         running = False
 
-    # Initialize Trainers
-    User.start_battle()  # Initializes Player
-    Opponent.start_battle()  # Initializes AI
-
-    # Initialize textures
-    fight_background = pygame.transform.scale(Textures.Fight_Background, (screen_vals.width, screen_vals.height))
-
-    # Initial variables
-    mouse_state = False  # Controller for whether mouse as been clicked
-    running = True  # While True battle is running
-
-    user_move_selection = None
-    buttons = []
-    # Create Fonts
-    attack_font = pygame.font.SysFont('Bahnschrift', 30)
-    text_font = pygame.font.SysFont('arial', 15)
-    win_font = pygame.font.SysFont('Bahnschrift', 30)
-
-    # Create text boxes
-    somethin = Text.textBox((500, 500), 200, 2, text_font, 1000)
-
-    # Create buttons
-    moves = Button.create_move_buttons(User.current_mon.moveset, attack_font)
-    attack = Button.rectangleButton(screen_w(.8), screen_h(.8), (200, 100), (255, 0, 0), 'Attack', attack_font,
-                                    ((0, 0, 0), 2))
     # turn list
-    turn_list = [ turn(User, Opponent, somethin)]
+    turn_list = [turn(User, Opponent, somethin)]
 
     while running:
+
         # Create Background
         screen.fill((0, 240, 240))
         screen.blit(fight_background, (0, 0))
 
         # Paste Sprites
         if User.current_mon != None:
-            screen.blit(User.current_mon.user_sprite, (450, 600))
-            showHP(User)
-
-        if Opponent.current_mon != None:
-            screen.blit(Opponent.current_mon.opp_sprite, (1100, 450))
-            showHP(Opponent)
-
+            User.current_mon.paste(screen_w(450 / 1920), screen_h(900 / 1080), 'ground',
+                                   User.current_mon.scale(User.current_mon.Right_pic, 400), True)
+        if Opponent.current_mon is not None:
+            Opponent.current_mon.paste(screen_w(1250 / 1920), screen_h(900 / 1080), 'ground',
+                                       Opponent.current_mon.scale(Opponent.current_mon.Left_pic, 400), True)
 
         # Paste Text Box
         somethin.paste_textBox()
@@ -213,7 +247,14 @@ def Battle(User, Opponent):
         # Update Screen
         pygame.display.update()
         # Control Turn
-        turn_list[-1].activePhase(buttons,turn_list,attack)
+        turn_list[-1].activePhase(buttons, turn_list, attack)
+
+        if current_user_mon != User.current_mon:
+            moves = Button.create_move_buttons(User.current_mon.moveset, attack_font)
+            monButtons = Button.create_mon_buttons(
+                [Joshumon for Joshumon in User.Joshumons if Joshumon != User.current_mon and Joshumon.fainted == False],
+                attack_font)
+            current_user_mon = User.current_mon
 
         # User Actions
         for event in pygame.event.get():
@@ -225,18 +266,41 @@ def Battle(User, Opponent):
             if event.type == pygame.MOUSEBUTTONUP:
                 mouse_state = False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if attack in buttons and attack.is_clicked() and pygame.time.get_ticks() - attack.last_click >= 200 and mouse_state == False:
-                    buttons = []
-                    buttons += moves
+                if attack in buttons and attack.is_clicked() and pygame.time.get_ticks() - attack.last_click >= 200 and not mouse_state:
+                    buttons = moves
+                    buttons.append(back)
                     attack.last_click = pygame.time.get_ticks()
                     mouse_state = True
-                    print('clicked')
+
+                if swap in buttons and swap.is_clicked() and pygame.time.get_ticks() - swap.last_click >= 200 and not mouse_state:
+                    buttons = monButtons
+                    buttons.append(back)
+                    swap.last_click = pygame.time.get_ticks()
+                    mouse_state = True
+                    turn_list[-1].mon_select = True
+
+                if back in buttons and back.is_clicked() and pygame.time.get_ticks() - swap.last_click >= 200 and not mouse_state:
+                    buttons = [attack,swap]
+                    swap.last_click = pygame.time.get_ticks()
+                    mouse_state = True
+
+
                 for x in moves:
                     if x in buttons and x.is_clicked() and pygame.time.get_ticks() - x.last_click >= 200 and mouse_state == False:
                         buttons = []
-                        User.action = x.move
+                        User.action = ['attack', x.move]
                         Opponent.action = Opponent.AI_Move()
                         turn_list[-1].phase = 'turnStart'
-                        attack.last_click = pygame.time.get_ticks()
+                        x.last_click = pygame.time.get_ticks()
                         mouse_state = True
+
+                for x in monButtons:
+                    if x in buttons and x.is_clicked() and pygame.time.get_ticks() - x.last_click >= 200 and mouse_state == False:
+                        buttons = []
+                        User.action = ['swap', x.mon]
+                        Opponent.action = Opponent.AI_Move()
+                        turn_list[-1].phase = 'turnStart'
+                        mouse_state = True
+                        turn_list[-1].mon_select = False
+                        x.last_click = pygame.time.get_ticks()
         game_clock.clock.tick(game_clock.FPS)

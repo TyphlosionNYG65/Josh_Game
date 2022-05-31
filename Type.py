@@ -1,3 +1,4 @@
+import screen_parameters,pygame
 class Gay:
     name = 'Gay'
     multipliers = {'Racism':2,
@@ -13,6 +14,8 @@ class Gay:
                 'Nerd':1}
     color = (255,192,203)
     alt_color = (255, 255, 255)
+    Indicator = pygame.Surface((screen_parameters.screen_w(20/1920),screen_parameters.screen_h(10/1080)))
+    Indicator.fill(color)
 
 
 class Lean:
@@ -30,6 +33,8 @@ class Lean:
                   'Nerd':2}
     color = (138,43,226)
     alt_color = (255,255,255)
+    Indicator = pygame.Surface((screen_parameters.screen_w(20 / 1920), screen_parameters.screen_h(10 / 1080)))
+    Indicator.fill(color)
 
 
 class Racism:
@@ -47,6 +52,8 @@ class Racism:
                   'Nerd':.5}
     color = (255,255,0)
     alt_color = (255, 255, 255)
+    Indicator = pygame.Surface((screen_parameters.screen_w(20 / 1920), screen_parameters.screen_h(10 / 1080)))
+    Indicator.fill(color)
 
 
 class Weeb:
@@ -64,6 +71,8 @@ class Weeb:
                   'Nerd':.5}
     color = (0, 0, 0)
     alt_color = (255, 255, 255)
+    Indicator = pygame.Surface((screen_parameters.screen_w(20 / 1920), screen_parameters.screen_h(10 / 1080)))
+    Indicator.fill(color)
 
 
 class Gainz:
@@ -81,6 +90,8 @@ class Gainz:
                   'Nerd':2}
     color = (210,105,30)
     alt_color = (255, 255, 255)
+    Indicator = pygame.Surface((screen_parameters.screen_w(20 / 1920), screen_parameters.screen_h(10 / 1080)))
+    Indicator.fill(color)
 
 
 class Sex:
@@ -98,6 +109,8 @@ class Sex:
                   'Nerd':.5}
     color = (0, 0, 0)
     alt_color = (255, 255, 255)
+    Indicator = pygame.Surface((screen_parameters.screen_w(20 / 1920), screen_parameters.screen_h(10 / 1080)))
+    Indicator.fill(color)
 
 
 class Gamer:
@@ -115,6 +128,8 @@ class Gamer:
                   'Nerd':2}
     color = (30,144,255)
     alt_color = (255, 255, 255)
+    Indicator = pygame.Surface((screen_parameters.screen_w(20 / 1920), screen_parameters.screen_h(10 / 1080)))
+    Indicator.fill(color)
 
 
 class Furry:
@@ -130,8 +145,10 @@ class Furry:
                   'Virgin':1,
                   'Retard':2,
                   'Nerd':1}
-    color = (138,43,226)
+    color = (0,43,226)
     alt_color = (255, 255, 255)
+    Indicator = pygame.Surface((screen_parameters.screen_w(20 / 1920), screen_parameters.screen_h(10 / 1080)))
+    Indicator.fill(color)
 
 
 class Virgin:
@@ -149,6 +166,8 @@ class Virgin:
                   'Nerd':1}
     color = (0, 0, 0)
     alt_color = (255, 255, 255)
+    Indicator = pygame.Surface((screen_parameters.screen_w(20 / 1920), screen_parameters.screen_h(10 / 1080)))
+    Indicator.fill(color)
 
 
 class Retard:
@@ -166,6 +185,8 @@ class Retard:
                   'Nerd':2}
     color = (0, 0, 0)
     alt_color = (255, 255, 255)
+    Indicator = pygame.Surface((screen_parameters.screen_w(20 / 1920), screen_parameters.screen_h(10 / 1080)))
+    Indicator.fill(color)
 
 
 class Nerd:
@@ -183,6 +204,11 @@ class Nerd:
                   'Nerd':1}
     color = (0, 0, 0)
     alt_color = (255, 255, 255)
+    Indicator = pygame.Surface((screen_parameters.screen_w(20 / 1920), screen_parameters.screen_h(10 / 1080)))
+    Indicator.fill(color)
+
+def paste_indicator(type,position):
+    screen_parameters.screen.blit(type.Indicator,position)
 
 
 
