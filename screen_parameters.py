@@ -12,4 +12,5 @@ screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 screen_vals.width, screen_vals.height = screen.get_size()
 screen_w = lambda mult : screen_vals.width * mult
 screen_h = lambda mult : screen_vals.height * mult
+font_scale = lambda mult : int(screen_vals.width/1920 * mult)
 FPS = 120

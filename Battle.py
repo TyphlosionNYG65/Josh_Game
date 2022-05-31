@@ -5,7 +5,7 @@ import Text
 import Textures
 import Trainer
 import game_clock
-from screen_parameters import screen, screen_vals, screen_w, screen_h
+from screen_parameters import screen, screen_vals, screen_w, screen_h,font_scale
 
 def Battle(User, Opponent):
     """
@@ -30,10 +30,12 @@ def Battle(User, Opponent):
     current_user_mon = User.current_mon
 
     # Create Fonts
-    attack_font = pygame.font.SysFont('Bahnschrift', 18)
-    swap_font = pygame.font.SysFont('Bahnschrift', 15)
-    text_font = pygame.font.SysFont('arial', 15)
-    win_font = pygame.font.SysFont('Bahnschrift', 30)
+    attack_font = pygame.font.SysFont('Bahnschrift', font_scale(18))
+    swap_font = pygame.font.SysFont('Bahnschrift', font_scale(15))
+    text_font = pygame.font.SysFont('arial', font_scale(15))
+    win_font = pygame.font.SysFont('Bahnschrift', font_scale(30))
+    print(attack_font.size('the'))
+    print(win_font.size('the'))
 
     # Create text boxes
     somethin = Text.textBox((screen_w(850 / 1920), screen_h(1000 / 1080)), screen_w(200/1920), 2, text_font, 1000)

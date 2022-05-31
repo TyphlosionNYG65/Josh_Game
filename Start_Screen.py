@@ -9,7 +9,7 @@ def Start():
     pygame.mixer.music.load('Lost in Paradise.mp3')
     pygame.mixer.music.play(1,0,2000)
     # Create Fonts
-    minor_font = pygame.font.SysFont('Bahnschrift', 30)
+    minor_font = pygame.font.SysFont('Bahnschrift', font_scale(30))
 
     # Create zombies
     zombies = []
