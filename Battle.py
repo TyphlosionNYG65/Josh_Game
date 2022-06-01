@@ -5,13 +5,15 @@ import Text
 import Textures
 import Trainer
 import game_clock
-from screen_parameters import screen, screen_vals, screen_w, screen_h,font_scale
+from screen_parameters import screen, screen_vals, screen_w, screen_h, font_scale
+
 
 def Battle(User, Opponent):
     """
     :param User: User Trainer controlled by Player
     :param Opponent: Opponent Trainer controlled by AI
     :return: None
+     # runs battles
     """
     global running
     assert type(User) == Trainer.Player
@@ -21,13 +23,13 @@ def Battle(User, Opponent):
     Opponent.start_battle()  # Initializes AI
 
     # Initialize textures
-    fight_background = Textures.Fight_Background1
-    fight_background.scale((screen_vals.width, screen_vals.height))
+    fight_background = Textures.Fight_Background1 # variable for animated fight background
+    fight_background.scale((screen_vals.width, screen_vals.height)) # scale background to screen
 
     # Initial variables
     mouse_state = False  # Controller for whether mouse as been clicked
     running = True  # While True battle is running
-    buttons = []
+    buttons = [] # list containing all on-screen buttons
     current_user_mon = User.current_mon
 
     # Create Fonts
@@ -35,11 +37,9 @@ def Battle(User, Opponent):
     swap_font = pygame.font.SysFont('Bahnschrift', font_scale(15))
     text_font = pygame.font.SysFont('arial', font_scale(15))
     win_font = pygame.font.SysFont('Bahnschrift', font_scale(30))
-    print(attack_font.size('the'))
-    print(win_font.size('the'))
 
     # Create text boxes
-    somethin = Text.textBox((screen_w(850 / 1920), screen_h(1000 / 1080)), screen_w(200/1920), 2, text_font, 1000)
+    somethin = Text.textBox((screen_w(850 / 1920), screen_h(1000 / 1080)), screen_w(200 / 1920), 2, text_font, 1000)
 
     # Create buttons
     attack = Button.rectangleButton(screen_w(.8), screen_h(.8), (screen_w(100 / 1920), screen_h(50 / 1080)),
@@ -48,13 +48,15 @@ def Battle(User, Opponent):
     swap = Button.rectangleButton(screen_w(.86), screen_h(.8), (screen_w(150 / 1920), screen_h(50 / 1080)), (0, 255, 0),
                                   'Swap Joshumon', attack_font,
                                   ((0, 0, 0), 2))
-    moves = Button.create_move_buttons(User.current_mon.moveset, attack_font,850 + User.current_mon.battle_sprite_right.get_size()[0])
+    size = User.current_mon.battle_sprite_right.get_size()
+    moves = Button.create_move_buttons(User.current_mon.moveset, attack_font,
+                                       850 + size[0])
     monButtons = Button.create_mon_buttons(
         [Joshumon for Joshumon in User.Joshumons if Joshumon != User.current_mon and Joshumon.fainted == False],
         attack_font)
     back = Button.rectangleButton(screen_w(.8), screen_h(.8), (screen_w(100 / 1920), screen_h(50 / 1080)),
-                                    (255, 0, 0), 'Back', attack_font,
-                                    ((0, 0, 0), 2))
+                                  (255, 0, 0), 'Back', attack_font,
+                                  ((0, 0, 0), 2))
 
     class turn:
         def __init__(self, User, Opponent, textbox):
@@ -75,20 +77,26 @@ def Battle(User, Opponent):
             self.mon_select = False
 
         def activePhase(self, buttons, turn_list, attack):
-            move_responses = {
+            """
+            :param buttons: Edits the button list depending on input and phase
+            :param turn_list: Uses most recent turn in list
+            :param attack: alters attack button use
+            :return:
+            """
+            move_responses = { # response dictionary dependent on effectiveness of move
                 'Supereffective': 'Nice move, king',
                 'Noteffective': 'Kinda lame move bro',
                 'None': 'That move was shit and you should feel bad'
             }
-            if self.mon_select:
+            if self.mon_select: # Currently in selection for new mon. Skips turn phgases
                 return
 
-            if self.phase == 'preTurn':
+            if self.phase == 'preTurn':# Move selection at beginning of turn
                 buttons += [attack, swap]
                 self.phase = 'None'
                 return
 
-            elif self.phase == 'turnStart':
+            elif self.phase == 'turnStart': # Determines action priority for turn
                 if self.User.current_mon.SD >= self.Opponent.current_mon.SD:
                     self.first = self.User
 
@@ -97,10 +105,11 @@ def Battle(User, Opponent):
                     self.first = self.Opponent
 
                     self.last = self.User
+
                 self.phase = 'firstMoveStart'
                 return
 
-            elif self.phase == 'firstMoveStart':
+            elif self.phase == 'firstMoveStart': # Calculates action for first prioirty action
                 if self.first.action[0] == 'attack':
                     self.textbox.text.append(
                         self.first.current_mon.name + ' ' + self.first.action[
@@ -124,7 +133,7 @@ def Battle(User, Opponent):
                     self.phase = 'firstMove'
                     return
 
-            elif self.phase == 'firstMove':
+            elif self.phase == 'firstMove': # Waits for end of animations for first priority action
                 if self.continueCheck():
                     if self.first.action[0] == 'attack':
                         if self.fainted != []:
@@ -138,7 +147,7 @@ def Battle(User, Opponent):
                     return
                 return
 
-            elif self.phase == 'lastMoveStart':
+            elif self.phase == 'lastMoveStart': # calculates actions for last priority action
                 if self.continueCheck():
                     if self.last.action[0] == 'attack':
                         self.textbox.text.append(
@@ -163,7 +172,7 @@ def Battle(User, Opponent):
                         self.phase = 'firstMove'
                         return
 
-            elif self.phase == 'lastMove':
+            elif self.phase == 'lastMove': # Waits for animations for last priority action
                 if self.continueCheck():
                     if self.last.action[0] == 'attack':
                         if self.fainted != []:
@@ -200,7 +209,7 @@ def Battle(User, Opponent):
                     elif self.last.current_mon == None:
                         battleEnd(self.first)
 
-        def faintCheck(self):
+        def faintCheck(self): # Checks if either mon is fainted and returns True if that is the case
             fainted = []
             if self.User.current_mon.fainted:
                 fainted += [User]
@@ -209,11 +218,20 @@ def Battle(User, Opponent):
             return fainted
 
         def continueCheck(self):
+            """
+            Checks if all animations have ceased in order to proceed forward in turn
+            :return:
+            """
             if self.textbox.text_lines == [] and self.first.current_mon.HP_Bar.motion == False and self.last.current_mon.HP_Bar.motion == False:
                 return True
             return False
 
     def battleEnd(Winner):
+        """
+        :param Winner:
+        :return:
+        Ends battle and declares winner
+        """
         global running
         winBox = Text.textBox((screen_w(500 / 1920), screen_h(500 / 1080)), 600, 1, win_font, 3000)
         winBox.text.append(Winner.name + ' Wins!')
@@ -227,13 +245,12 @@ def Battle(User, Opponent):
     turn_list = [turn(User, Opponent, somethin)]
 
     while running:
-
         # Create Background
         screen.fill((0, 240, 240))
-        fight_background.paste((0,0))
+        fight_background.paste((0, 0))
         screen.blit(attack_font.render(
             str(pygame.mouse.get_pos()),
-            False,(0,0,0)),(0,0))
+            False, (0, 0, 0)), (0, 0))
 
         # Paste Sprites
         if User.current_mon != None:
@@ -252,11 +269,13 @@ def Battle(User, Opponent):
 
         # Update Screen
         pygame.display.update()
+
         # Control Turn
         turn_list[-1].activePhase(buttons, turn_list, attack)
 
         if current_user_mon != User.current_mon:
-            moves = Button.create_move_buttons(User.current_mon.moveset, attack_font,850 + User.current_mon.battle_sprite_right.get_size()[0])
+            moves = Button.create_move_buttons(User.current_mon.moveset, attack_font,
+                                               850 + size[0])
             monButtons = Button.create_mon_buttons(
                 [Joshumon for Joshumon in User.Joshumons if Joshumon != User.current_mon and Joshumon.fainted == False],
                 attack_font)
@@ -286,11 +305,10 @@ def Battle(User, Opponent):
                     turn_list[-1].mon_select = True
 
                 if back in buttons and back.is_clicked() and pygame.time.get_ticks() - swap.last_click >= 200 and not mouse_state:
-                    buttons = [attack,swap]
+                    buttons = [attack, swap]
                     swap.last_click = pygame.time.get_ticks()
                     turn_list[-1].mon_select = False
                     mouse_state = True
-
 
                 for x in moves:
                     if x in buttons and x.is_clicked() and pygame.time.get_ticks() - x.last_click >= 200 and mouse_state == False:
