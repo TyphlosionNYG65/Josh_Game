@@ -3,16 +3,15 @@ import Textures
 import Type
 import pygame
 import Text
-from screen_parameters import screen_w, screen_h, screen
+from screen_parameters import screen_w, screen_h, screen,font_scale
 
-nametag_font = pygame.font.SysFont('arial', 20)
+nametag_font = pygame.font.SysFont('arial', font_scale(20))
 class Joshumons:
 
     def __init__(self, lvl=1, moves=[]):
         self.lvl = lvl
         self.moveset = moves
         self.fainted = False
-        self.size_ratio = 1
         self.nametag = None
         self.width = 0
 
@@ -50,7 +49,6 @@ class Joshumons:
             variant = 'Noteffective'
         elif type_mult == 0:
             variant = 'None'
-
         return damage * type_mult, variant
 
     def scale(self, sprite, area):
@@ -79,18 +77,20 @@ class Joshumons:
             self.fainted = True
 
 class Durple(Joshumons):
+    type1 = Type.Lean
+    type2 = Type.Furry
+    Left_pic = Textures.Durple
+    Right_pic = pygame.transform.flip(Left_pic, True, False)
+    width, height = Right_pic.get_rect().size
+    size_ratio = height / width
+    base_HP = 50
+    base_Defense = 50
+    base_Attack = 80
+    base_Speed = 120
     def __init__(self, lvl=1, moves=[]):
         super().__init__(lvl, moves)
-        self.type1 = Type.Lean
-        self.type2 = Type.Furry
-        self.Left_pic = Textures.Durple
-        self.Right_pic = pygame.transform.flip(self.Left_pic, True, False)
-        self.width, self.height = self.Right_pic.get_rect().size
-        self.size_ratio = self.height / self.width
-        self.base_HP = 50
-        self.base_Defense = 50
-        self.base_Attack = 80
-        self.base_Speed = 120
+        self.battle_sprite_right = self.scale(type(self).Right_pic, 400)
+        self.battle_sprite_left = self.scale(type(self).Left_pic,400)
         self.calc_stats()
         self.current_HP = self.HP
         self.name = 'Durple'
@@ -99,18 +99,20 @@ class Durple(Joshumons):
 
 
 class The_Coon(Joshumons):
+    type1 = Type.Racism
+    type2 = Type.Virgin
+    Left_pic = Textures.Coon
+    Right_pic = pygame.transform.flip(Left_pic, True, False)
+    width, height = Right_pic.get_rect().size
+    size_ratio = height / width
+    base_HP = 150
+    base_Defense = 50
+    base_Attack = 120
+    base_Speed = 30
     def __init__(self, lvl=1, moves=[]):
         super().__init__(lvl, moves)
-        self.type1 = Type.Racism
-        self.type2 = Type.Virgin
-        self.Left_pic = Textures.Coon
-        self.Right_pic = pygame.transform.flip(self.Left_pic, True, False)
-        self.width, self.height = self.Right_pic.get_rect().size
-        self.size_ratio = self.height / self.width
-        self.base_HP = 150
-        self.base_Defense = 50
-        self.base_Attack = 120
-        self.base_Speed = 30
+        self.battle_sprite_right = self.scale(type(self).Right_pic, 400)
+        self.battle_sprite_left = self.scale(type(self).Left_pic, 400)
         self.calc_stats()
         self.current_HP = self.HP
         self.name = 'The Coon'
@@ -119,18 +121,21 @@ class The_Coon(Joshumons):
 
 
 class Muscle_Man(Joshumons):
+    type1 = Type.Gainz
+    type2 = Type.Lean
+    Left_pic = Textures.MuscleMan
+    Right_pic = pygame.transform.flip(Left_pic, True, False)
+    width, height = Right_pic.get_rect().size
+    size_ratio = height / width
+    base_HP = 100
+    base_Defense = 50
+    base_Attack = 150
+    base_Speed = 50
     def __init__(self, lvl=1, moves=[]):
         super().__init__(lvl, moves)
-        self.type1 = Type.Gainz
-        self.type2 = Type.Lean
-        self.Left_pic = Textures.MuscleMan
-        self.Right_pic = pygame.transform.flip(self.Left_pic, True, False)
-        self.width, self.height = self.Right_pic.get_rect().size
-        self.size_ratio = self.height / self.width
-        self.base_HP = 100
-        self.base_Defense = 50
-        self.base_Attack = 150
-        self.base_Speed = 50
+
+        self.battle_sprite_right = self.scale(type(self).Right_pic, 400)
+        self.battle_sprite_left = self.scale(type(self).Left_pic, 400)
         self.calc_stats()
         self.current_HP = self.HP
         self.name = 'Muscle Man'
@@ -138,20 +143,22 @@ class Muscle_Man(Joshumons):
         self.nametag = Text.Text(nametag_font,(self.name + '  lvl '+str(self.lvl)),(0,0,0))
 
 class Hamburger_Helper(Joshumons):
+    type1 = Type.Gay
+    type2 = None
+    Left_pic = Textures.HamHelp
+    Right_pic = pygame.transform.flip(Left_pic, True, False)
+    width, height = Right_pic.get_rect().size
+    size_ratio = height / width
+    base_HP = 100
+    base_Defense = 50
+    base_Attack = 150
+    base_Speed = 50
     def __init__(self, lvl=1, moves=[]):
         super().__init__(lvl, moves)
-        self.type1 = Type.Gay
-        self.type2 = None
-        self.Left_pic = Textures.HamHelp
-        self.Right_pic = pygame.transform.flip(self.Left_pic, True, False)
-        self.width, self.height = self.Right_pic.get_rect().size
-        self.size_ratio = self.height / self.width
-        self.base_HP = 100
-        self.base_Defense = 50
-        self.base_Attack = 150
-        self.base_Speed = 50
+        self.battle_sprite_right = self.scale(type(self).Right_pic, 400)
+        self.battle_sprite_left = self.scale(type(self).Left_pic, 400)
         self.calc_stats()
         self.current_HP = self.HP
-        self.name = 'Muscle Man'
+        self.name = 'Hamburger Helper'
         self.HP_Bar = Interactives.hpBar(self, (Joshumons.HP_width,Joshumons.HP_height))
         self.nametag = Text.Text(nametag_font,(self.name + '  lvl '+str(self.lvl)),(0,0,0))

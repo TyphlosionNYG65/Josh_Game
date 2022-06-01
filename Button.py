@@ -83,8 +83,9 @@ class textButton(Button):
         Detects if left mouse button is hovering over button\n
         :return: boolean
         """
-        if self.x - self.width <= pygame.mouse.get_pos()[0] <= self.x + self.width and self.center_y - self.height <= \
-                pygame.mouse.get_pos()[1] <= self.center_y + self.height:
+        mouse_pos = pygame.mouse.get_pos()
+        if self.x - self.width <= mouse_pos[0] <= self.x + self.width and self.center_y - self.height <= \
+                mouse_pos[1] <= self.center_y + self.height:
             if not self.hovering:
                 self.hovering = True
                 self.text.new_render()
@@ -184,7 +185,7 @@ class monButton(rectangleButton):
             self.inverse_color = self.mon.type1.alt_color
         self.font = font
         self.words = self.mon.name
-        self.sprite = self.mon.scale(self.mon.Left_pic,50)
+        self.sprite = self.mon.scale(self.mon.Left_pic,size[0])
         self.text = Text.Text(self.font, self.words, self.inverse_color)
 
 
@@ -215,26 +216,30 @@ def paste_buttons(buttons):
         if type(button) == monButton:
              screen.blit(button.outline, (button.x - button.outline_thick, button.y - button.outline_thick))
              screen.blit(button.rectangle, (button.x, button.y))
-             button.text.paste((button.center_x, button.center_y), 'center')
+             button.text.paste((button.x+2, button.y+2), 'left')
+             screen.blit(button.sprite,(button.x+(button.width*2)-button.sprite.get_size()[0], button.y+(button.height*2)-button.sprite.get_size()[1]))
 
 
 
-def create_move_buttons(moves, font):
+def create_move_buttons(moves,font,center):
     total = []
     move_count = 0
+    center_x = center
+    length = len(moves)
+    button_width = 125
     for i in moves:
-        x = screen_w(1500 / 1920) + move_count * screen_w(100 / 1920)
+        x = screen_w((center_x - length*1/2*button_width) / 1920) + move_count * screen_w(button_width / 1920)
         y = screen_h(1000 / 1080)
         move_count += 1
-        total.append(moveButton(x, y, (screen_w(100 / 1920), screen_h(50 / 1080)), font, i, ((0, 0, 0), 2)))
+        total.append(moveButton(x, y, (screen_w(button_width / 1920), screen_h(75 / 1080)), font, i, ((0, 0, 0), 2)))
     return total
 
 def create_mon_buttons(mons, font):
     total = []
     move_count = 0
     for i in mons:
-        x = screen_w(1500 / 1920) + move_count * screen_w(100 / 1920)
+        x = screen_w(1500 / 1920) + move_count * screen_w(150 / 1920)
         y = screen_h(1000 / 1080)
         move_count += 1
-        total.append(monButton(x, y, (screen_w(100 / 1920), screen_h(50 / 1080)), font, i, ((0, 0, 0), 2)))
+        total.append(monButton(x, y, (screen_w(150 / 1920), screen_h(75 / 1080)), font, i, ((0, 0, 0), 2)))
     return total

@@ -21,7 +21,8 @@ def Battle(User, Opponent):
     Opponent.start_battle()  # Initializes AI
 
     # Initialize textures
-    fight_background = pygame.transform.scale(Textures.Fight_Background2, (screen_vals.width, screen_vals.height))
+    fight_background = Textures.Fight_Background1
+    fight_background.scale((screen_vals.width, screen_vals.height))
 
     # Initial variables
     mouse_state = False  # Controller for whether mouse as been clicked
@@ -47,7 +48,7 @@ def Battle(User, Opponent):
     swap = Button.rectangleButton(screen_w(.86), screen_h(.8), (screen_w(150 / 1920), screen_h(50 / 1080)), (0, 255, 0),
                                   'Swap Joshumon', attack_font,
                                   ((0, 0, 0), 2))
-    moves = Button.create_move_buttons(User.current_mon.moveset, attack_font)
+    moves = Button.create_move_buttons(User.current_mon.moveset, attack_font,850 + User.current_mon.battle_sprite_right.get_size()[0])
     monButtons = Button.create_mon_buttons(
         [Joshumon for Joshumon in User.Joshumons if Joshumon != User.current_mon and Joshumon.fainted == False],
         attack_font)
@@ -229,15 +230,18 @@ def Battle(User, Opponent):
 
         # Create Background
         screen.fill((0, 240, 240))
-        screen.blit(fight_background, (0, 0))
+        fight_background.paste((0,0))
+        screen.blit(attack_font.render(
+            str(pygame.mouse.get_pos()),
+            False,(0,0,0)),(0,0))
 
         # Paste Sprites
         if User.current_mon != None:
             User.current_mon.paste(screen_w(450 / 1920), screen_h(900 / 1080), 'ground',
-                                   User.current_mon.scale(User.current_mon.Right_pic, 400), True)
+                                   User.current_mon.battle_sprite_right, True)
         if Opponent.current_mon is not None:
             Opponent.current_mon.paste(screen_w(1250 / 1920), screen_h(900 / 1080), 'ground',
-                                       Opponent.current_mon.scale(Opponent.current_mon.Left_pic, 400), True)
+                                       Opponent.current_mon.battle_sprite_left, True)
 
         # Paste Text Box
         somethin.paste_textBox()
@@ -252,7 +256,7 @@ def Battle(User, Opponent):
         turn_list[-1].activePhase(buttons, turn_list, attack)
 
         if current_user_mon != User.current_mon:
-            moves = Button.create_move_buttons(User.current_mon.moveset, attack_font)
+            moves = Button.create_move_buttons(User.current_mon.moveset, attack_font,850 + User.current_mon.battle_sprite_right.get_size()[0])
             monButtons = Button.create_mon_buttons(
                 [Joshumon for Joshumon in User.Joshumons if Joshumon != User.current_mon and Joshumon.fainted == False],
                 attack_font)
@@ -284,6 +288,7 @@ def Battle(User, Opponent):
                 if back in buttons and back.is_clicked() and pygame.time.get_ticks() - swap.last_click >= 200 and not mouse_state:
                     buttons = [attack,swap]
                     swap.last_click = pygame.time.get_ticks()
+                    turn_list[-1].mon_select = False
                     mouse_state = True
 
 

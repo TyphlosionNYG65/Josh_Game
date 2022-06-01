@@ -34,3 +34,9 @@ class Coon_Claws:
     power = 15
     type = Type.Furry
     text = 'slashed'
+
+class Moan:
+    name = 'Moan'
+    power = 100
+    type = Type.Sex
+    text = 'moaned'
