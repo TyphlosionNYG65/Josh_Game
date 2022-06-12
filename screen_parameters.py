@@ -1,6 +1,5 @@
 import pygame
 
-
 class screen_size:
     def __init__(self):
         self.width = 0

@@ -11,8 +11,9 @@ import Joshumon, Moves
 def main():
     running = True
     while running:
-        Start()
-        pygame.mixer.music.pause
+        mode = Start()
+        if mode == 'battle':
+            print('homo')
         Battle(Trainer.Player('Josh pinsky',[Joshumon.Durple(50,[Moves.Bite,Moves.Bark]),Joshumon.Muscle_Man(50,[Moves.Punch,Moves.Kick])]),Trainer.AI_Trainer('Drio',[Joshumon.The_Coon(50,[Moves.Coon_Claws,Moves.Coon_Pounce])]))
 
 # run the main function only if this module is executed as the main script

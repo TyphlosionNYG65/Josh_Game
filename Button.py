@@ -67,7 +67,7 @@ class textButton(Button):
         2. is_hovering(self): Detects if left mouse button is hovering over button\n
         """
 
-    def __init__(self, text, position):
+    def __init__(self, text, position = (0,0)):
         self.text = text
         self.size = self.text.size
         self.width = self.size[0] / 2
@@ -77,6 +77,7 @@ class textButton(Button):
         self.center_x = self.x
         self.center_y = self.y - self.height
         self.hovering = False
+        self.last_click = 0
 
     def is_hovering(self):
         """
