@@ -29,11 +29,17 @@ class Text:
     def __init__(self, font, text,  color):
         self.font = font
         self.text = text
-        self.size = font.size(text)
+
+
         self.color = color
         self.inverse_color = (255 - self.color[0], 255 - self.color[1], 255 - self.color[2])
         self.active_color = True
         self.render = font.render(text, False, color)
+        if type(self.render) == tuple:
+            self.render = self.render[0]
+
+        self.size = self.render.get_size()
+
 
 
     def new_render(self):

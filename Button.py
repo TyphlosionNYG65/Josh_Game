@@ -1,6 +1,8 @@
-import Text
 import pygame
 
+import Text
+import Textures
+import Joshumon
 from screen_parameters import screen, screen_w, screen_h
 
 
@@ -34,7 +36,6 @@ class Button:
         """
         if pygame.mouse.get_pressed()[0]:
             if self.is_hovering():
-                self.hovering = False
                 return True
             else:
                 return False
@@ -67,7 +68,7 @@ class textButton(Button):
         2. is_hovering(self): Detects if left mouse button is hovering over button\n
         """
 
-    def __init__(self, text, position = (0,0)):
+    def __init__(self, text, position=(0, 0)):
         self.text = text
         self.size = self.text.size
         self.width = self.size[0] / 2
@@ -76,7 +77,6 @@ class textButton(Button):
         self.y = position[1]
         self.center_x = self.x
         self.center_y = self.y - self.height
-        self.hovering = False
         self.last_click = 0
 
     def is_hovering(self):
@@ -87,13 +87,11 @@ class textButton(Button):
         mouse_pos = pygame.mouse.get_pos()
         if self.x - self.width <= mouse_pos[0] <= self.x + self.width and self.center_y - self.height <= \
                 mouse_pos[1] <= self.center_y + self.height:
-            if not self.hovering:
-                self.hovering = True
+            if self.text.active_color:
                 self.text.new_render()
             return True
         else:
-            if self.hovering:
-                self.hovering = False
+            if not self.text.active_color:
                 self.text.new_render()
             return False
 
@@ -111,15 +109,13 @@ class rectangleButton(Button):
         self.rectangle = pygame.Surface((size[0], size[1]))
         self.rectangle.fill(color)
         self.active_color = True
-        self.hovering = False
         self.last_click = 0
+        self.rectangle.set_alpha(120)
+
         if text is not None:
             self.font = font
             self.words = text
             self.text = Text.Text(self.font, self.words, self.inverse_color)
-
-            while self.text.size[0] >= self.width*2:
-                self.font.size
         else:
             self.text = None
         if outline is not None:
@@ -127,6 +123,7 @@ class rectangleButton(Button):
             self.outline_thick = outline[1]
             self.outline = pygame.Surface((size[0] + (self.outline_thick * 2), size[1] + (self.outline_thick * 2)))
             self.outline.fill(self.outline_color)
+            self.outline.set_alpha(100)
         else:
             self.outline = None
 
@@ -135,12 +132,12 @@ class rectangleButton(Button):
             self.rectangle.fill(self.inverse_color)
             self.active_color = False
             if self.text is not None:
-                self.text = Text.Text(self.font, self.words, self.color)
+                self.text.new_render()
         elif not self.active_color:
             self.rectangle.fill(self.color)
             self.active_color = True
             if self.text is not None:
-                self.text = Text.Text(self.font, self.words, self.inverse_color, )
+                self.text.new_render()
 
     def is_hovering(self):
         """
@@ -150,14 +147,12 @@ class rectangleButton(Button):
         if self.center_x - self.width <= pygame.mouse.get_pos()[
             0] <= self.center_x + self.width and self.center_y - self.height <= \
                 pygame.mouse.get_pos()[1] <= self.center_y + self.height:
-            if not self.hovering:
-                self.hovering = True
+            if self.active_color != False:
                 self.flip_color()
             return True
         else:
 
-            if self.hovering:
-                self.hovering = False
+            if self.active_color != True:
                 self.flip_color()
             return False
 
@@ -172,7 +167,8 @@ class moveButton(rectangleButton):
         self.inverse_color = self.type.alt_color
         self.font = font
         self.words = self.move.name
-        self.text = Text.Text(self.font, self.words, self.inverse_color)
+        self.text = pygame.freetype.font.render_to()
+
 
 class monButton(rectangleButton):
     def __init__(self, x, y, size, font, mon, outline=None):
@@ -186,8 +182,33 @@ class monButton(rectangleButton):
             self.inverse_color = self.mon.type1.alt_color
         self.font = font
         self.words = self.mon.name
-        self.sprite = self.mon.scale(self.mon.Left_pic,size[0])
+        scale_area = (size[0]/4 * size[1])
+        self.sprite = self.mon.scale(self.mon,self.mon.Left_pic, scale_area )
+        while self.sprite.get_size()[0] > self.width/2 - 2 or self.sprite.get_size()[1] > self.height*2 - 2:
+            scale_area *= .95
+            self.sprite = self.mon.scale(self.mon, self.mon.Left_pic, scale_area)
         self.text = Text.Text(self.font, self.words, self.inverse_color)
+        self.text_height = self.text.render.get_size()[1]
+
+
+
+class selectButton(rectangleButton):
+    def __init__(self, x, y, size,color = (50, 50, 50)):
+        super().__init__( x, y, size, color, None, None, ((0,0,0),1))
+        self.size = size
+        self.image = pygame.transform.scale(Textures.plus,(size))
+        self.image_width,self.image_height = self.image.get_size()
+        self.selected = False
+        self.color = color
+        self.alt_color = (55, 55, 55)
+        mon = None
+
+    def change_image(self,mon = None):
+        if mon == None:
+            self.image = pygame.transform.scale(Textures.plus,(self.size))
+        else:
+            self.image = mon.scale(mon,mon.Left_pic, self.size[0]*self.size[1] * .6)
+        self.image_width, self.image_height = self.image.get_size()
 
 
 
@@ -197,43 +218,56 @@ def button_hovers(buttons):
 
 
 def paste_buttons(buttons):
-    moves = 0
     for button in buttons:
         if type(button) == textButton:
             button.text.paste((button.center_x, button.center_y), 'center')
+            continue
         if type(button) == rectangleButton:
             if button.outline is not None:
                 screen.blit(button.outline, (button.x - button.outline_thick, button.y - button.outline_thick))
             screen.blit(button.rectangle, (button.x, button.y))
             if button.text is not None:
                 button.text.paste((button.center_x, button.center_y), 'center')
+            continue
 
         if type(button) == moveButton:
-            moves += 1
             screen.blit(button.outline, (button.x - button.outline_thick, button.y - button.outline_thick))
             screen.blit(button.rectangle, (button.x, button.y))
             button.text.paste((button.center_x, button.center_y), 'center')
+            continue
 
         if type(button) == monButton:
-             screen.blit(button.outline, (button.x - button.outline_thick, button.y - button.outline_thick))
-             screen.blit(button.rectangle, (button.x, button.y))
-             button.text.paste((button.x+2, button.y+2), 'left')
-             screen.blit(button.sprite,(button.x+(button.width*2)-button.sprite.get_size()[0], button.y+(button.height*2)-button.sprite.get_size()[1]))
+           # screen.blit(button.outline, (button.x - button.outline_thick, button.y - button.outline_thick))
+            pygame.draw.rect(screen, (0, 0, 0),
+                            (button.x - 1, button.y - 1, (button.width * 2) + 2, (button.height * 2) + 2), 1)
+            screen.blit(button.rectangle, (button.x, button.y))
 
 
+            button.text.paste((button.x + screen_w(2/1920) + button.width/2, button.y + button.height - button.text_height/2), 'left')
+            screen.blit(button.sprite, (button.x + screen_w(2/1920),
+                                        button.y + (button.height * 2) - button.sprite.get_size()[1]))
+            continue
+        if type(button) == selectButton:
 
-def create_move_buttons(moves,font,center):
+            pygame.draw.rect(screen, (0, 0, 0),
+                             (button.x - 1, button.y - 1, (button.width * 2) + 2, (button.height * 2) + 2), 1)
+            screen.blit(button.rectangle, (button.x, button.y))
+            screen.blit(button.image,(button.x + button.width -button.image_width/2,button.y+button.height - button.image_height/2))
+
+
+def create_move_buttons(moves, font, center):
     total = []
     move_count = 0
     center_x = center
     length = len(moves)
     button_width = 125
     for i in moves:
-        x = screen_w((center_x - length*1/2*button_width) / 1920) + move_count * screen_w(button_width / 1920)
+        x = screen_w((center_x - length * 1 / 2 * button_width) / 1920) + move_count * screen_w(button_width / 1920)
         y = screen_h(1000 / 1080)
         move_count += 1
         total.append(moveButton(x, y, (screen_w(button_width / 1920), screen_h(75 / 1080)), font, i, ((0, 0, 0), 2)))
     return total
+
 
 def create_mon_buttons(mons, font):
     total = []

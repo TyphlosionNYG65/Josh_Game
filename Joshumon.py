@@ -4,11 +4,12 @@ import Type
 import pygame
 import Text
 from screen_parameters import screen_w, screen_h, screen,font_scale
+pygame.init()
 
 nametag_font = pygame.font.SysFont('arial', font_scale(20))
 class Joshumons:
 
-    def __init__(self, lvl=1, moves=[]):
+    def __init__(self, lvl=1, moves=[],right = None,left = None, ):
         self.lvl = lvl
         self.moveset = moves
         self.fainted = False
@@ -52,9 +53,12 @@ class Joshumons:
         return damage * type_mult, variant
 
     def scale(self, sprite, area):
-        width = (area / self.size_ratio) ** 1 / 2
+        width = (area / self.size_ratio) ** (1/2)
+
         height = width * self.size_ratio
+
         width, height = screen_w(width / 1920), screen_h(height / 1080)
+
         return pygame.transform.smoothscale(sprite, (width, height))
 
     def paste(self, x, y, orientation, sprite,nametag = False):
@@ -75,11 +79,188 @@ class Joshumons:
         if self.current_HP <= 0:
             self.current_HP = 0
             self.fainted = True
+class Armin(Joshumons):
+    type1 = Type.Nerd
+    type2 = Type.Weeb
+    name = 'Armin'
+    Left_pic = Textures.armin
+    Right_pic = pygame.transform.flip(Left_pic, True, False)
+    width, height = Right_pic.get_rect().size
+    size_ratio = height / width
+    base_HP = 50
+    base_Defense = 40
+    base_Attack = 130
+    base_Speed = 120
+    # TODO: See if possible to add init to super class
+    def __init__(self, lvl=1, moves=[]):
+        super().__init__(lvl, moves)
+
+        self.battle_sprite_right = self.scale(type(self).Right_pic, 400)
+        self.battle_sprite_left = self.scale(type(self).Left_pic, 400)
+        self.calc_stats()
+        self.current_HP = self.HP
+        self.HP_Bar = Interactives.hpBar(self, (Joshumons.HP_width, Joshumons.HP_height))
+        self.nametag = Text.Text(nametag_font, (self.name + '  lvl ' + str(self.lvl)), (0, 0, 0))
+
+class CatholicPriest(Joshumons):
+    type1 = Type.Gay
+    type2 = Type.Sex
+    name = 'Catholic Priest'
+    Left_pic = Textures.Priest
+    Right_pic = pygame.transform.flip(Left_pic, True, False)
+    width, height = Right_pic.get_rect().size
+    size_ratio = height / width
+    base_HP = 50
+    base_Defense = 40
+    base_Attack = 130
+    base_Speed = 120
+    def __init__(self, lvl=1, moves=[]):
+        super().__init__(lvl, moves)
+        self.battle_sprite_right = self.scale(type(self).Right_pic, 400)
+        self.battle_sprite_left = self.scale(type(self).Left_pic, 400)
+        self.calc_stats()
+        self.current_HP = self.HP
+        self.HP_Bar = Interactives.hpBar(self, (Joshumons.HP_width, Joshumons.HP_height))
+        self.nametag = Text.Text(nametag_font, (self.name + '  lvl ' + str(self.lvl)), (0, 0, 0))
+
+class Clamantha(Joshumons):
+    type1 = Type.Lean
+    type2 = Type.Retard
+    name = 'Clamantha'
+    Left_pic = Textures.Clamantha
+    Right_pic = pygame.transform.flip(Left_pic, True, False)
+    width, height = Right_pic.get_rect().size
+    size_ratio = height / width
+    base_HP = 100
+    base_Defense = 90
+    base_Attack = 110
+    base_Speed = 15
+
+    def __init__(self, lvl=1, moves=[]):
+        super().__init__(lvl, moves)
+        self.battle_sprite_right = self.scale(type(self).Right_pic, 400)
+        self.battle_sprite_left = self.scale(type(self).Left_pic, 400)
+        self.calc_stats()
+        self.current_HP = self.HP
+        self.HP_Bar = Interactives.hpBar(self, (Joshumons.HP_width, Joshumons.HP_height))
+        self.nametag = Text.Text(nametag_font, (self.name + '  lvl ' + str(self.lvl)), (0, 0, 0))
+
+class CptFatFuck(Joshumons):
+    type1 = Type.Racism
+    type2 = Type.Sex
+    name = 'Captain. Fat Fuck'
+    Left_pic = Textures.FatFuck
+    Right_pic = pygame.transform.flip(Left_pic, True, False)
+    width, height = Right_pic.get_rect().size
+    size_ratio = height / width
+    base_HP = 100
+    base_Defense = 90
+    base_Attack = 110
+    base_Speed = 15
+
+    def __init__(self, lvl=1, moves=[]):
+        super().__init__(lvl, moves)
+        self.battle_sprite_right = self.scale(type(self).Right_pic, 400)
+        self.battle_sprite_left = self.scale(type(self).Left_pic, 400)
+        self.calc_stats()
+        self.current_HP = self.HP
+        self.HP_Bar = Interactives.hpBar(self, (Joshumons.HP_width, Joshumons.HP_height))
+        self.nametag = Text.Text(nametag_font, (self.name + '  lvl ' + str(self.lvl)), (0, 0, 0))
+
+class Drip(Joshumons):
+    type1 = Type.Sex
+    type2 = None
+    name = 'Drip'
+    Left_pic = Textures.Drip
+    Right_pic = pygame.transform.flip(Left_pic, True, False)
+    width, height = Right_pic.get_rect().size
+    size_ratio = height / width
+    base_HP = 50
+    base_Defense = 40
+    base_Attack = 130
+    base_Speed = 120
+
+    def __init__(self, lvl=1, moves=[]):
+        super().__init__(lvl, moves)
+        self.battle_sprite_right = self.scale(type(self).Right_pic, 400)
+        self.battle_sprite_left = self.scale(type(self).Left_pic, 400)
+        self.calc_stats()
+        self.current_HP = self.HP
+        self.HP_Bar = Interactives.hpBar(self, (Joshumons.HP_width, Joshumons.HP_height))
+        self.nametag = Text.Text(nametag_font, (self.name + '  lvl ' + str(self.lvl)), (0, 0, 0))
+
+
+class Duck(Joshumons):
+    type1 = Type.Furry
+    type2 = Type.Sex
+    name = 'Duck'
+    Right_pic = Textures.Duck
+    Left_pic = pygame.transform.flip(Right_pic, True, False)
+    width, height = Right_pic.get_rect().size
+    size_ratio = height / width
+    base_HP = 50
+    base_Defense = 40
+    base_Attack = 130
+    base_Speed = 120
+
+    def __init__(self, lvl=1, moves=[]):
+        super().__init__(lvl, moves)
+        self.battle_sprite_right = self.scale(type(self).Right_pic, 400)
+        self.battle_sprite_left = self.scale(type(self).Left_pic, 400)
+        self.calc_stats()
+        self.current_HP = self.HP
+        self.HP_Bar = Interactives.hpBar(self, (Joshumons.HP_width, Joshumons.HP_height))
+        self.nametag = Text.Text(nametag_font, (self.name + '  lvl ' + str(self.lvl)), (0, 0, 0))
 
 class Durple(Joshumons):
     type1 = Type.Lean
     type2 = Type.Furry
-    Left_pic = Textures.Durple
+    name = 'Durple'
+    Right_pic = Textures.Durple
+    Left_pic = pygame.transform.flip(Right_pic, True, False)
+    width, height = Right_pic.get_rect().size
+    size_ratio = height / width
+    base_HP = 50
+    base_Defense = 50
+    base_Attack = 80
+    base_Speed = 120
+    def __init__(self, lvl=1, moves=[]):
+        super().__init__(lvl, moves)
+        self.battle_sprite_right = self.scale(type(self).Right_pic, 400)
+        self.battle_sprite_left = self.scale(type(self).Left_pic,400)
+        self.calc_stats()
+        self.current_HP = self.HP
+        self.name = 'Durple'
+        self.HP_Bar = Interactives.hpBar(self, (Joshumons.HP_width,Joshumons.HP_height))
+        self.nametag = Text.Text(nametag_font,(self.name + '  lvl '+str(self.lvl)),(0,0,0))
+
+class Garfield(Joshumons):
+    type1 = Type.Furry
+    type2 = None
+    name = 'Garfield'
+    Left_pic = Textures.Garfield
+    Right_pic = pygame.transform.flip(Left_pic, True, False)
+    width, height = Right_pic.get_rect().size
+    size_ratio = height / width
+    base_HP = 100
+    base_Defense = 50
+    base_Attack = 150
+    base_Speed = 50
+    def __init__(self, lvl=1, moves=[]):
+        super().__init__(lvl, moves)
+        self.battle_sprite_right = self.scale(type(self).Right_pic, 400)
+        self.battle_sprite_left = self.scale(type(self).Left_pic, 400)
+        self.calc_stats()
+        self.current_HP = self.HP
+        self.name = 'Hamburger Helper'
+        self.HP_Bar = Interactives.hpBar(self, (Joshumons.HP_width,Joshumons.HP_height))
+        self.nametag = Text.Text(nametag_font,(self.name + '  lvl '+str(self.lvl)),(0,0,0))
+
+class GayOtter(Joshumons):
+    type1 = Type.Gay
+    type2 = Type.Furry
+    name = 'GayOtter'
+    Left_pic = Textures.Otter
     Right_pic = pygame.transform.flip(Left_pic, True, False)
     width, height = Right_pic.get_rect().size
     size_ratio = height / width
@@ -97,10 +278,299 @@ class Durple(Joshumons):
         self.HP_Bar = Interactives.hpBar(self, (Joshumons.HP_width,Joshumons.HP_height))
         self.nametag = Text.Text(nametag_font,(self.name + '  lvl '+str(self.lvl)),(0,0,0))
 
+class Hamburger_Helper(Joshumons):
+    type1 = Type.Gay
+    type2 = None
+    name = 'Hamburger Helper'
+    Left_pic = Textures.HamHelp
+    Right_pic = pygame.transform.flip(Left_pic, True, False)
+    width, height = Right_pic.get_rect().size
+    size_ratio = height / width
+    base_HP = 100
+    base_Defense = 50
+    base_Attack = 150
+    base_Speed = 50
+    def __init__(self, lvl=1, moves=[]):
+        super().__init__(lvl, moves)
+        self.battle_sprite_right = self.scale(type(self).Right_pic, 400)
+        self.battle_sprite_left = self.scale(type(self).Left_pic, 400)
+        self.calc_stats()
+        self.current_HP = self.HP
+        self.name = 'Hamburger Helper'
+        self.HP_Bar = Interactives.hpBar(self, (Joshumons.HP_width,Joshumons.HP_height))
+        self.nametag = Text.Text(nametag_font,(self.name + '  lvl '+str(self.lvl)),(0,0,0))
+
+class JeffFisher(Joshumons):
+    type1 = Type.Gainz
+    type2 = None
+    name = 'Jeff Fisher'
+    Left_pic = Textures.JeffFisher
+    Right_pic = pygame.transform.flip(Left_pic, True, False)
+    width, height = Right_pic.get_rect().size
+    size_ratio = height / width
+    base_HP = 50
+    base_Defense = 40
+    base_Attack = 130
+    base_Speed = 120
+
+    def __init__(self, lvl=1, moves=[]):
+        super().__init__(lvl, moves)
+        self.battle_sprite_right = self.scale(type(self).Right_pic, 400)
+        self.battle_sprite_left = self.scale(type(self).Left_pic, 400)
+        self.calc_stats()
+        self.current_HP = self.HP
+        self.HP_Bar = Interactives.hpBar(self, (Joshumons.HP_width, Joshumons.HP_height))
+        self.nametag = Text.Text(nametag_font, (self.name + '  lvl ' + str(self.lvl)), (0, 0, 0))
+
+class JohnDarkSouls(Joshumons):
+    type1 = Type.Gamer
+    type2 = Type.Gainz
+    name = 'John Dark Souls'
+    Right_pic = Textures.John
+    Left_pic = pygame.transform.flip(Right_pic, True, False)
+    width, height = Right_pic.get_rect().size
+    size_ratio = height / width
+    base_HP = 50
+    base_Defense = 40
+    base_Attack = 130
+    base_Speed = 120
+
+    def __init__(self, lvl=1, moves=[]):
+        super().__init__(lvl, moves)
+        self.battle_sprite_right = self.scale(type(self).Right_pic, 400)
+        self.battle_sprite_left = self.scale(type(self).Left_pic, 400)
+        self.calc_stats()
+        self.current_HP = self.HP
+        self.HP_Bar = Interactives.hpBar(self, (Joshumons.HP_width, Joshumons.HP_height))
+        self.nametag = Text.Text(nametag_font, (self.name + '  lvl ' + str(self.lvl)), (0, 0, 0))
+
+class JohnnySins(Joshumons):
+    type1 = Type.Sex
+    type2 = None
+    name = 'Johnny Sins'
+    Right_pic = Textures.johnny
+    Left_pic = pygame.transform.flip(Right_pic, True, False)
+    width, height = Right_pic.get_rect().size
+    size_ratio = height / width
+    base_HP = 50
+    base_Defense = 40
+    base_Attack = 130
+    base_Speed = 120
+
+    def __init__(self, lvl=1, moves=[]):
+        super().__init__(lvl, moves)
+        self.battle_sprite_right = self.scale(type(self).Right_pic, 400)
+        self.battle_sprite_left = self.scale(type(self).Left_pic, 400)
+        self.calc_stats()
+        self.current_HP = self.HP
+        self.HP_Bar = Interactives.hpBar(self, (Joshumons.HP_width, Joshumons.HP_height))
+        self.nametag = Text.Text(nametag_font, (self.name + '  lvl ' + str(self.lvl)), (0, 0, 0))
+
+
+class KKK(Joshumons):
+    type1 = Type.Racism
+    type2 = Type.Retard
+    name = 'KKK'
+    Left_pic = Textures.KKK
+    Right_pic = pygame.transform.flip(Left_pic, True, False)
+    width, height = Right_pic.get_rect().size
+    size_ratio = height / width
+    base_HP = 50
+    base_Defense = 40
+    base_Attack = 130
+    base_Speed = 120
+
+    def __init__(self, lvl=1, moves=[]):
+        super().__init__(lvl, moves)
+        self.battle_sprite_right = self.scale(type(self).Right_pic, 400)
+        self.battle_sprite_left = self.scale(type(self).Left_pic, 400)
+        self.calc_stats()
+        self.current_HP = self.HP
+        self.HP_Bar = Interactives.hpBar(self, (Joshumons.HP_width, Joshumons.HP_height))
+        self.nametag = Text.Text(nametag_font, (self.name + '  lvl ' + str(self.lvl)), (0, 0, 0))
+
+class Lorax(Joshumons):
+    type1 = Type.Furry
+    type2 = None
+    name = 'Marine Lorax'
+    Left_pic = Textures.Lorax
+    Right_pic = pygame.transform.flip(Left_pic, True, False)
+    width, height = Right_pic.get_rect().size
+    size_ratio = height / width
+    base_HP = 50
+    base_Defense = 40
+    base_Attack = 130
+    base_Speed = 120
+    def __init__(self, lvl=1, moves=[]):
+        super().__init__(lvl, moves)
+        self.battle_sprite_right = self.scale(type(self).Right_pic, 400)
+        self.battle_sprite_left = self.scale(type(self).Left_pic, 400)
+        self.calc_stats()
+        self.current_HP = self.HP
+        self.HP_Bar = Interactives.hpBar(self, (Joshumons.HP_width, Joshumons.HP_height))
+        self.nametag = Text.Text(nametag_font, (self.name + '  lvl ' + str(self.lvl)), (0, 0, 0))
+
+class Mort(Joshumons):
+    type1 = Type.Gay
+    type2 = Type.Virgin
+    name = 'Mort'
+    Left_pic = Textures.Mort
+    Right_pic = pygame.transform.flip(Left_pic, True, False)
+    width, height = Right_pic.get_rect().size
+    size_ratio = height / width
+    base_HP = 50
+    base_Defense = 40
+    base_Attack = 130
+    base_Speed = 120
+
+    def __init__(self, lvl=1, moves=[]):
+        super().__init__(lvl, moves)
+        self.battle_sprite_right = self.scale(type(self).Right_pic, 400)
+        self.battle_sprite_left = self.scale(type(self).Left_pic, 400)
+        self.calc_stats()
+        self.current_HP = self.HP
+        self.HP_Bar = Interactives.hpBar(self, (Joshumons.HP_width, Joshumons.HP_height))
+        self.nametag = Text.Text(nametag_font, (self.name + '  lvl ' + str(self.lvl)), (0, 0, 0))
+
+class Muscle_Man(Joshumons):
+    type1 = Type.Gainz
+    type2 = Type.Lean
+    name = 'Muscle Man'
+    Left_pic = Textures.MuscleMan
+    Right_pic = pygame.transform.flip(Left_pic, True, False)
+    width, height = Right_pic.get_rect().size
+    size_ratio = height / width
+    base_HP = 100
+    base_Defense = 50
+    base_Attack = 150
+    base_Speed = 50
+    def __init__(self, lvl=1, moves=[]):
+        super().__init__(lvl, moves)
+        self.battle_sprite_right = self.scale(type(self).Right_pic, 400)
+        self.battle_sprite_left = self.scale(type(self).Left_pic, 400)
+        self.calc_stats()
+        self.current_HP = self.HP
+        self.name = 'Muscle Man'
+        self.HP_Bar = Interactives.hpBar(self, (Joshumons.HP_width,Joshumons.HP_height))
+        self.nametag = Text.Text(nametag_font,(self.name + '  lvl '+str(self.lvl)),(0,0,0))
+
+class NikoCado(Joshumons):
+    type1 = Type.Gay
+    type2 = None
+    name = 'Nikocado'
+    Right_pic = Textures.NikoCado
+    Left_pic = pygame.transform.flip(Right_pic, True, False)
+    width, height = Right_pic.get_rect().size
+    size_ratio = height / width
+    base_HP = 50
+    base_Defense = 40
+    base_Attack = 130
+    base_Speed = 120
+
+    def __init__(self, lvl=1, moves=[]):
+        super().__init__(lvl, moves)
+        self.battle_sprite_right = self.scale(type(self).Right_pic, 400)
+        self.battle_sprite_left = self.scale(type(self).Left_pic, 400)
+        self.calc_stats()
+        self.current_HP = self.HP
+        self.HP_Bar = Interactives.hpBar(self, (Joshumons.HP_width, Joshumons.HP_height))
+        self.nametag = Text.Text(nametag_font, (self.name + '  lvl ' + str(self.lvl)), (0, 0, 0))
+
+
+
+
+class Schnitzel(Joshumons):
+    type1 = Type.Gainz
+    type2 = Type.Weeb
+    name = 'Schnitzel'
+    Left_pic = Textures.Schnitzel
+    Right_pic = pygame.transform.flip(Left_pic, True, False)
+    width, height = Right_pic.get_rect().size
+    size_ratio = height / width
+    base_HP = 50
+    base_Defense = 40
+    base_Attack = 130
+    base_Speed = 120
+
+    def __init__(self, lvl=1, moves=[]):
+        super().__init__(lvl, moves)
+        self.battle_sprite_right = self.scale(type(self).Right_pic, 400)
+        self.battle_sprite_left = self.scale(type(self).Left_pic, 400)
+        self.calc_stats()
+        self.current_HP = self.HP
+        self.HP_Bar = Interactives.hpBar(self, (Joshumons.HP_width, Joshumons.HP_height))
+        self.nametag = Text.Text(nametag_font, (self.name + '  lvl ' + str(self.lvl)), (0, 0, 0))
+
+class Smokey(Joshumons):
+    type1 = Type.Furry
+    type2 = Type.Gainz
+    name = 'Smokey The Bear'
+    Left_pic = Textures.smokey
+    Right_pic = pygame.transform.flip(Left_pic, True, False)
+    width, height = Right_pic.get_rect().size
+    size_ratio = height / width
+    base_HP = 50
+    base_Defense = 40
+    base_Attack = 130
+    base_Speed = 120
+
+    def __init__(self, lvl=1, moves=[]):
+        super().__init__(lvl, moves)
+        self.battle_sprite_right = self.scale(type(self).Right_pic, 400)
+        self.battle_sprite_left = self.scale(type(self).Left_pic, 400)
+        self.calc_stats()
+        self.current_HP = self.HP
+        self.HP_Bar = Interactives.hpBar(self, (Joshumons.HP_width, Joshumons.HP_height))
+        self.nametag = Text.Text(nametag_font, (self.name + '  lvl ' + str(self.lvl)), (0, 0, 0))
+
+class Strapichu(Joshumons):
+    type1 = Type.Gamer
+    type2 = Type.Weeb
+    name = 'Strapichu'
+    Right_pic = Textures.Strapichu
+    Left_pic = pygame.transform.flip(Right_pic, True, False)
+    width, height = Right_pic.get_rect().size
+    size_ratio = height / width
+    base_HP = 50
+    base_Defense = 40
+    base_Attack = 130
+    base_Speed = 120
+
+    def __init__(self, lvl=1, moves=[]):
+        super().__init__(lvl, moves)
+        self.battle_sprite_right = self.scale(type(self).Right_pic, 400)
+        self.battle_sprite_left = self.scale(type(self).Left_pic, 400)
+        self.calc_stats()
+        self.current_HP = self.HP
+        self.HP_Bar = Interactives.hpBar(self, (Joshumons.HP_width, Joshumons.HP_height))
+        self.nametag = Text.Text(nametag_font, (self.name + '  lvl ' + str(self.lvl)), (0, 0, 0))
+
+class Teddy(Joshumons):
+    type1 = Type.Gainz
+    type2 = None
+    name = 'Teddy Roosovelt'
+    Left_pic = Textures.teddy
+    Right_pic = pygame.transform.flip(Left_pic, True, False)
+    width, height = Right_pic.get_rect().size
+    size_ratio = height / width
+    base_HP = 150
+    base_Defense = 50
+    base_Attack = 120
+    base_Speed = 30
+    def __init__(self, lvl=1, moves=[]):
+        super().__init__(lvl, moves)
+        self.battle_sprite_right = self.scale(type(self).Right_pic, 400)
+        self.battle_sprite_left = self.scale(type(self).Left_pic, 400)
+        self.calc_stats()
+        self.current_HP = self.HP
+        self.name = 'The Coon'
+        self.HP_Bar = Interactives.hpBar(self, (Joshumons.HP_width,Joshumons.HP_height))
+        self.nametag = Text.Text(nametag_font,(self.name + '  lvl '+str(self.lvl)),(0,0,0))
 
 class The_Coon(Joshumons):
     type1 = Type.Racism
     type2 = Type.Virgin
+    name = 'The Coon'
     Left_pic = Textures.Coon
     Right_pic = pygame.transform.flip(Left_pic, True, False)
     width, height = Right_pic.get_rect().size
@@ -119,46 +589,72 @@ class The_Coon(Joshumons):
         self.HP_Bar = Interactives.hpBar(self, (Joshumons.HP_width,Joshumons.HP_height))
         self.nametag = Text.Text(nametag_font,(self.name + '  lvl '+str(self.lvl)),(0,0,0))
 
-
-class Muscle_Man(Joshumons):
-    type1 = Type.Gainz
-    type2 = Type.Lean
-    Left_pic = Textures.MuscleMan
+class Yaoyorozu(Joshumons):
+    type1 = Type.Weeb
+    type2 = Type.Nerd
+    name = 'Yaoyorozu'
+    Left_pic = Textures.Yaoyorozu
     Right_pic = pygame.transform.flip(Left_pic, True, False)
     width, height = Right_pic.get_rect().size
     size_ratio = height / width
-    base_HP = 100
+    base_HP = 150
     base_Defense = 50
-    base_Attack = 150
-    base_Speed = 50
-    def __init__(self, lvl=1, moves=[]):
-        super().__init__(lvl, moves)
-
-        self.battle_sprite_right = self.scale(type(self).Right_pic, 400)
-        self.battle_sprite_left = self.scale(type(self).Left_pic, 400)
-        self.calc_stats()
-        self.current_HP = self.HP
-        self.name = 'Muscle Man'
-        self.HP_Bar = Interactives.hpBar(self, (Joshumons.HP_width,Joshumons.HP_height))
-        self.nametag = Text.Text(nametag_font,(self.name + '  lvl '+str(self.lvl)),(0,0,0))
-
-class Hamburger_Helper(Joshumons):
-    type1 = Type.Gay
-    type2 = None
-    Left_pic = Textures.HamHelp
-    Right_pic = pygame.transform.flip(Left_pic, True, False)
-    width, height = Right_pic.get_rect().size
-    size_ratio = height / width
-    base_HP = 100
-    base_Defense = 50
-    base_Attack = 150
-    base_Speed = 50
+    base_Attack = 120
+    base_Speed = 30
     def __init__(self, lvl=1, moves=[]):
         super().__init__(lvl, moves)
         self.battle_sprite_right = self.scale(type(self).Right_pic, 400)
         self.battle_sprite_left = self.scale(type(self).Left_pic, 400)
         self.calc_stats()
         self.current_HP = self.HP
-        self.name = 'Hamburger Helper'
+        self.name = 'The Coon'
         self.HP_Bar = Interactives.hpBar(self, (Joshumons.HP_width,Joshumons.HP_height))
         self.nametag = Text.Text(nametag_font,(self.name + '  lvl '+str(self.lvl)),(0,0,0))
+
+replist = []
+replist = [[type] for type in Type.Types]
+for type in replist:
+    type.append(0)
+
+for mon in Joshumons.__subclasses__():
+    for type in replist:
+        if type[0] == mon.type1:
+            type[1] += 1
+        elif type[0] == mon.type2:
+            type[1] += 1
+
+for type in replist:
+    print(type[0].name + ': '+str(type[1]))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -12,7 +12,7 @@ class Gay:
                 'Virgin':1,
                 'Retard':2,
                 'Nerd':1}
-    color = (255,192,203)
+    color = (255,192,203) # Trans pink
     alt_color = (255, 255, 255)
     Indicator = pygame.Surface((screen_parameters.screen_w(20/1920),screen_parameters.screen_h(10/1080)))
     Indicator.fill(color)
@@ -31,7 +31,7 @@ class Lean:
                   'Virgin':.5,
                   'Retard':.5,
                   'Nerd':2}
-    color = (138,43,226)
+    color = (138,43,226) # purple
     alt_color = (255,255,255)
     Indicator = pygame.Surface((screen_parameters.screen_w(20 / 1920), screen_parameters.screen_h(10 / 1080)))
     Indicator.fill(color)
@@ -50,7 +50,7 @@ class Racism:
                   'Virgin':1,
                   'Retard':.5,
                   'Nerd':.5}
-    color = (255,255,0)
+    color = (0,0,0) # White
     alt_color = (255, 255, 255)
     Indicator = pygame.Surface((screen_parameters.screen_w(20 / 1920), screen_parameters.screen_h(10 / 1080)))
     Indicator.fill(color)
@@ -69,7 +69,7 @@ class Weeb:
                   'Virgin':2,
                   'Retard':1,
                   'Nerd':.5}
-    color = (0, 0, 0)
+    color = (135,206,235) # Super Saiyan Blue
     alt_color = (255, 255, 255)
     Indicator = pygame.Surface((screen_parameters.screen_w(20 / 1920), screen_parameters.screen_h(10 / 1080)))
     Indicator.fill(color)
@@ -88,7 +88,7 @@ class Gainz:
                   'Virgin':0,
                   'Retard':1,
                   'Nerd':2}
-    color = (210,105,30)
+    color = (192,192,192) # Silver
     alt_color = (255, 255, 255)
     Indicator = pygame.Surface((screen_parameters.screen_w(20 / 1920), screen_parameters.screen_h(10 / 1080)))
     Indicator.fill(color)
@@ -107,7 +107,7 @@ class Sex:
                   'Virgin':0,
                   'Retard':.5,
                   'Nerd':.5}
-    color = (0, 0, 0)
+    color = (144, 44, 62) # Velvet
     alt_color = (255, 255, 255)
     Indicator = pygame.Surface((screen_parameters.screen_w(20 / 1920), screen_parameters.screen_h(10 / 1080)))
     Indicator.fill(color)
@@ -126,8 +126,8 @@ class Gamer:
                   'Virgin':2,
                   'Retard':1,
                   'Nerd':2}
-    color = (30,144,255)
-    alt_color = (255, 255, 255)
+    color = (30,144,255) # Piss Yellow
+    alt_color = (225, 225, 20)
     Indicator = pygame.Surface((screen_parameters.screen_w(20 / 1920), screen_parameters.screen_h(10 / 1080)))
     Indicator.fill(color)
 
@@ -145,7 +145,7 @@ class Furry:
                   'Virgin':1,
                   'Retard':2,
                   'Nerd':1}
-    color = (0,43,226)
+    color = (139,69,19) # Brown
     alt_color = (255, 255, 255)
     Indicator = pygame.Surface((screen_parameters.screen_w(20 / 1920), screen_parameters.screen_h(10 / 1080)))
     Indicator.fill(color)
@@ -164,7 +164,7 @@ class Virgin:
                   'Virgin':1,
                   'Retard':2,
                   'Nerd':1}
-    color = (0, 0, 0)
+    color = (34,139,34)
     alt_color = (255, 255, 255)
     Indicator = pygame.Surface((screen_parameters.screen_w(20 / 1920), screen_parameters.screen_h(10 / 1080)))
     Indicator.fill(color)
@@ -183,7 +183,7 @@ class Retard:
                   'Virgin':.5,
                   'Retard':1,
                   'Nerd':2}
-    color = (0, 0, 0)
+    color = (255,140,0) # Orange
     alt_color = (255, 255, 255)
     Indicator = pygame.Surface((screen_parameters.screen_w(20 / 1920), screen_parameters.screen_h(10 / 1080)))
     Indicator.fill(color)
@@ -202,13 +202,16 @@ class Nerd:
                   'Virgin':.5,
                   'Retard':2,
                   'Nerd':1}
-    color = (0, 0, 0)
+    color = (32,42,68) # Navy Blue
     alt_color = (255, 255, 255)
     Indicator = pygame.Surface((screen_parameters.screen_w(20 / 1920), screen_parameters.screen_h(10 / 1080)))
     Indicator.fill(color)
 
 def paste_indicator(type,position):
     screen_parameters.screen.blit(type.Indicator,position)
+
+Types = [Gay,Lean,Racism,Weeb,Gainz,Sex,Gamer,Furry,Virgin,Retard,Nerd]
+print(Types)
 
 
 
