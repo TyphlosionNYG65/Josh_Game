@@ -40,3 +40,15 @@ class Moan:
     power = 100
     type = Type.Sex
     text = 'moaned'
+
+class pH1:
+    name = 'placeHolder1'
+    power = 100
+    type = Type.Nerd
+    text = 'e'
+
+class pH2:
+    name = 'placeHolder2'
+    power = 100
+    type = Type.Retard
+    text = 'e'

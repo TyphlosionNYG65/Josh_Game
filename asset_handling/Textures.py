@@ -1,9 +1,20 @@
-import os,pygame,game_clock
-from screen_parameters import screen
-def load(Image):
-    path = os.path.join(os.getcwd(),'Images',Image)
-    return pygame.image.load(path)
+import os
+import pygame
+import shelve
 
+from screen_parameters import screen
+
+def load(Image):
+    """
+    Takes as input a file name - Image from the Image Folder in assets and returns a pygame image
+    """
+    try:
+        path = os.path.join(os.getcwd(), 'assets\Images', Image)
+        return pygame.image.load(path)
+    except FileNotFoundError:
+        game_directory = os.path.normpath(os.getcwd() + os.sep + os.pardir)
+        path = os.path.join(game_directory, 'assets\Images',Image)
+    return pygame.image.load(path)
 
 Josh_Texture = load('Josh.png')
 Start_screen = load('Start screen.jpg')
@@ -33,22 +44,25 @@ Clamantha = load('clamantha.png')
 Yaoyorozu = load('Yaoyorozu.png')
 smokey = load('smokey.png')
 HP_High = load('HP_High.png')
-HP_Low =  load('HP_low.png')
+HP_Low = load('HP_low.png')
 HP_Back = load('HP_Back.png')
 HP_Border = load('HP_border.png')
 plus = load('plus.png')
+down = load('arrow.png')
+up = pygame.transform.flip(down, False, True)
+
 
 class gif:
-    def __init__(self,gif):
-        directory = os.path.join(os.getcwd(), 'Images', gif)
+    def __init__(self, gif):
+        directory = os.path.join(os.getcwd(), 'assets\\gifs', gif)
         directory2 = os.listdir(directory)
-        self.frames = [pygame.image.load(os.path.join(directory, filename)) for filename in directory2 ]
+        self.frames = [pygame.image.load(os.path.join(directory, filename)) for filename in directory2]
         self.frame_size = len(self.frames)
-        self.current_frame = [self.frames[0],0]
+        self.current_frame = [self.frames[0], 0]
         self.start_time = 0
 
     def paste(self, position):
-        if pygame.time.get_ticks() - self.start_time >= 1000/self.frame_size:
+        if pygame.time.get_ticks() - self.start_time >= 1000 / self.frame_size:
             self.start_time = pygame.time.get_ticks()
 
             if self.current_frame[1] == self.frame_size:
@@ -57,11 +71,10 @@ class gif:
             self.current_frame[1] += 1
         screen.blit(self.current_frame[0], position)
 
-
     def scale(self, size):
         for num in range(self.frame_size):
             self.frames[num] = pygame.transform.scale(self.frames[num], size)
 
-Fight_Background1=gif('FightBackground1-gif')
-SelectScreen1 = gif('SelectScreen1')
 
+Fight_Background1 = gif('FightBackground1-gif')
+SelectScreen1 = gif('SelectScreen1')

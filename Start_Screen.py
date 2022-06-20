@@ -1,6 +1,6 @@
-import Button
-import Text
-import Textures
+from gui_elements import Button
+from gui_elements import Text
+from asset_handling import Textures
 import game_clock
 import sys
 from Start_Zombie import update, spawner
@@ -42,7 +42,7 @@ def Start():
     battle_simulator_text = Text.Text(minor_font, 'Battle Simulator', (50, 50, 50))
     battle_simulator_button = Button.textButton(battle_simulator_text, (screen_w(.5), screen_h(0)))
     modeButtons = [battle_simulator_button]
-    mod_dict = {battle_simulator_button: 'battle'}
+    mod_dict = {battle_simulator_button: 'battle_select'}
 
     start_screen = pygame.transform.smoothscale(Textures.Start_screen, (screen_w(1), screen_h(1)))
 

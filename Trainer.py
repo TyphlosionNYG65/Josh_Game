@@ -1,8 +1,11 @@
-import pygame,random,Textures
+import random
+
 
 class Player:
-    def __init__(self,name,Joshumons):
+    def __init__(self, name, Joshumons):
         self.Joshumons = Joshumons
+        while len(self.Joshumons )< 6:
+            self.Joshumons.append(None)
         self.current_mon = None
         self.name = name
         self.action = None
@@ -20,31 +23,15 @@ class Player:
                 return True
         return False
 
+
 class AI_Trainer(Player):
-    def __init__(self,name,Joshumons):
-        super().__init__(name,Joshumons)
+    def __init__(self, name, Joshumons):
+        super().__init__(name, Joshumons)
 
     def AI_Move(self):
-        return ['attack',random.choices(self.current_mon.moveset)[0]]
+        return ['attack', random.choices(self.current_mon.moveset)[0]]
+
 
 class Josh(Player):
-    def __init__(self,name,Joshumons):
-        super().__init__(name,Joshumons)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    def __init__(self, name, Joshumons):
+        super().__init__(name, Joshumons)

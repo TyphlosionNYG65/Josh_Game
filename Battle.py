@@ -1,11 +1,12 @@
 import pygame
-
-import Button
-import Text
-import Textures
+from gui_elements import Button
+from gui_elements import Text
+from asset_handling import Textures
 import Trainer
 import game_clock
 from screen_parameters import screen, screen_vals, screen_w, screen_h, font_scale
+
+#TODO fix orientation of Joshumon sprites
 
 
 def Battle(User, Opponent):
@@ -254,8 +255,7 @@ def Battle(User, Opponent):
 
         # Paste Sprites
         if User.current_mon != None:
-            User.current_mon.paste(screen_w(450 / 1920), screen_h(900 / 1080), 'ground',
-                                   User.current_mon.battle_sprite_right, True)
+            User.current_mon.paste(screen_w(450 / 1920), screen_h(900 / 1080), 'ground',User.current_mon.battle_sprite_right, True)
         if Opponent.current_mon is not None:
             Opponent.current_mon.paste(screen_w(1250 / 1920), screen_h(900 / 1080), 'ground',
                                        Opponent.current_mon.battle_sprite_left, True)
